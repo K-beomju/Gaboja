@@ -14,10 +14,13 @@ public class MainMenu : Menu<MainMenu>
     private GameObject pnGroup;
     [SerializeField]
     private Button exitBtn;
+    [SerializeField]
+    private Button createBtn;
 
     protected override void Awake()
     {
         base.Awake();
+        // 패널 , 버튼 그룹 리스트 추가 
         for (int i = 0; i < 4; i++)
         {
             int temp = i;
@@ -29,8 +32,11 @@ public class MainMenu : Menu<MainMenu>
 
             exitBtn.onClick.AddListener(() => ExitButton(temp));
         }
+        // 제작 버튼 메서드 등록 
+        createBtn.onClick.AddListener(() => CreateButton());
     }
 
+    //패널 여는 버튼 
     public void MainButton(int i)
     {
         exitBtn.gameObject.SetActive(true);
@@ -43,12 +49,17 @@ public class MainMenu : Menu<MainMenu>
         buttonList[i].interactable = false;
         panelList[i].gameObject.SetActive(true);
     }
-
+    //패널 닫기 버튼 
     public void ExitButton(int i)
     {
         panelList[i].gameObject.SetActive(false);
         buttonList[i].interactable = true;
         exitBtn.gameObject.SetActive(false);
+    }
+
+    //제작 버튼 
+    public void CreateButton()
+    {
 
     }
 
