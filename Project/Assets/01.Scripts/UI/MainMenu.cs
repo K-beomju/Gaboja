@@ -65,6 +65,7 @@ public class MainMenu : Menu<MainMenu>
         buttonList[i].interactable = true;
         exitBtn.gameObject.SetActive(false);
     }
+   
 
 
 
