@@ -17,6 +17,8 @@ public class MainMenu : Menu<MainMenu>
     [SerializeField]
     private Button createBtn;
 
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -33,7 +35,14 @@ public class MainMenu : Menu<MainMenu>
             exitBtn.onClick.AddListener(() => ExitButton(temp));
         }
         // 제작 버튼 메서드 등록 
-        createBtn.onClick.AddListener(() => CreateButton());
+       // createBtn.onClick.AddListener(() => CreateButton());
+    }
+
+    private void Start()
+    {
+        // 시작할때 닫기 
+        panelList.ForEach(x => x.gameObject.SetActive(false));
+        exitBtn.gameObject.SetActive(false);
     }
 
     //패널 여는 버튼 
@@ -57,11 +66,6 @@ public class MainMenu : Menu<MainMenu>
         exitBtn.gameObject.SetActive(false);
     }
 
-    //제작 버튼 
-    public void CreateButton()
-    {
-
-    }
 
 
     public override void OnBackPressed()

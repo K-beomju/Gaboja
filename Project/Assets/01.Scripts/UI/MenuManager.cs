@@ -15,7 +15,6 @@ public class MenuManager : MonoBehaviour
 
     // 메뉴 매니져에서 관리할 개별 메뉴 클래스들
     public MainMenu mainMenuPrefab;
-   // public CreditMenu creditMenuPrefab;
    // public OptionMenu optionMenuPrefab;
 
     // 스택으로 캔버스 메뉴들을 관리
@@ -67,10 +66,11 @@ public class MenuManager : MonoBehaviour
             print("필드함수들 : " + fields[i]);
         }
 
-       // Menu[] menuPrefabs = { mainMenuPrefab, creditMenuPrefab, optionMenuPrefab };
+    
         foreach(FieldInfo field in fields)
         {
             Menu prefab = field.GetValue(this) as Menu;
+           
             if(prefab != null)
             {
                 Menu menuInstance = Instantiate(prefab, _menuParent);
