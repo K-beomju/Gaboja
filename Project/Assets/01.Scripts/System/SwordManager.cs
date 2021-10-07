@@ -2,18 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class SwordInfo
+{
+    //Ä®ÀÇ Á¤º¸
+    public int SWORD_ID;
+    public float SWORD_ATK;
+    public string SWORD_NAME;
+    public Sprite SWORD_IMG;
+
+}
+
 public class SwordManager : MonoBehaviour
 {
     public static SwordManager instance;
 
-    public GameObject[] SwordObject;  //Ä® ¿ÀºêÁ§Æ®
-    List<GameObject> SwordList = new List<GameObject>();
+    public GameObject SwordObject;  //Ä® ¿ÀºêÁ§Æ®
+    List<SwordInfo> SwordList = new List<SwordInfo>();
 
     public BoxCollider2D CreatArea;
+    public GameObject SwordParents;
 
     void Start()
     {
-        
+        instance = this;
     }
 
     // Update is called once per frame
@@ -38,10 +50,18 @@ public class SwordManager : MonoBehaviour
         return randomPos;
     }
 
-    private void CreateSword() // Ä® »ý¼º ÇÔ¼ö
+    public void CreateSword() // Ä® »ý¼º ÇÔ¼ö
     {
         Vector3 createPos = GetRandomPosition();
-        Instantiate(SwordObject[0], createPos, Quaternion.identity);
+        GameObject swordObj = Instantiate(SwordObject, createPos, Quaternion.identity);
+        swordObj.transform.SetParent(SwordParents.transform);
+    }
+
+    public void MergeSword(int num)
+    {
+        GameObject go = Instantiate(SwordObject);
+        go.transform.SetParent(SwordParents.transform);
+        //go.GetComponent<MergeItem>().InitItem(SwordList[num]);
     }
 
 

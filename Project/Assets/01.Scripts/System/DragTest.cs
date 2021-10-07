@@ -2,24 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-
-
-public class Sword : MonoBehaviour,IBeginDragHandler ,IDragHandler , IEndDragHandler , IDropHandler
+public class DragTest : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public List<SwordInfo> swordInfo = new List<SwordInfo>();
-    public GameObject currentSword;
-
-    GameObject nextSword;
-
+    // Start is called before the first frame update
     void Start()
     {
         
     }
 
+    // Update is called once per frame
     void Update()
     {
-        
         
     }
 
@@ -30,26 +25,14 @@ public class Sword : MonoBehaviour,IBeginDragHandler ,IDragHandler , IEndDragHan
 
     public void OnDrag(PointerEventData eventData)
     {
-        
+        Debug.Log("Hi");
+
         transform.position = Input.mousePosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        Debug.Log("hi2");
 
     }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-
-    }
-
-    public void MergeSword()
-    {
-            
-    }
-
-
-   
-    
 }
