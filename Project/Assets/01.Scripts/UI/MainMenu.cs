@@ -14,8 +14,7 @@ public class MainMenu : Menu<MainMenu>
     private GameObject pnGroup;
     [SerializeField]
     private Button exitBtn;
-    [SerializeField]
-    private Button createBtn;
+
 
 
 
@@ -34,8 +33,7 @@ public class MainMenu : Menu<MainMenu>
 
             exitBtn.onClick.AddListener(() => ExitButton(temp));
         }
-        // 제작 버튼 메서드 등록 
-       // createBtn.onClick.AddListener(() => CreateButton());
+        
     }
 
     private void Start()
@@ -65,9 +63,8 @@ public class MainMenu : Menu<MainMenu>
         buttonList[i].interactable = true;
         exitBtn.gameObject.SetActive(false);
     }
-   
 
-
+ 
 
     public override void OnBackPressed()
     {

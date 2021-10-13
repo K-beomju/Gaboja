@@ -52,13 +52,13 @@ TextureImporter:
     second: SWORDS_15
   - first:
       213: -4433933650812557807
-    second: SWORDS_16
+    second: 2
   - first:
       213: 1840632030296711598
     second: SWORDS_17
   - first:
       213: 5799974236643953837
-    second: 123213
+    second: 123
   - first:
       213: -5190495252698881654
     second: 12321
@@ -106,16 +106,16 @@ TextureImporter:
     second: SWORDS_33
   - first:
       213: -5482508611120101659
-    second: SWORDS_34
+    second: 5
   - first:
       213: 1744328506600713418
     second: SWORDS_35
   - first:
       213: 2490165391162980852
-    second: SWORDS_36
+    second: 12
   - first:
       213: -5879456438612020662
-    second: SWORDS_37
+    second: 6
   - first:
       213: 4915179542361871838
     second: SWORDS_38
@@ -136,7 +136,7 @@ TextureImporter:
     second: SWORDS_43
   - first:
       213: 5753714936135202593
-    second: SWORDS_44
+    second: 7
   - first:
       213: 4172803338585641310
     second: SWORDS_45
@@ -184,7 +184,7 @@ TextureImporter:
     second: SWORDS_59
   - first:
       213: 3940755544343029667
-    second: SWORDS_60
+    second: 3
   - first:
       213: 7977755390281212669
     second: SWORDS_61
@@ -196,7 +196,7 @@ TextureImporter:
     second: SWORDS_63
   - first:
       213: -2402909245029486810
-    second: SWORDS_64
+    second: 1
   - first:
       213: 3360255035361637215
     second: SWORDS_65
@@ -232,7 +232,7 @@ TextureImporter:
     second: SWORDS_75
   - first:
       213: 6180552409001641060
-    second: SWORDS_76
+    second: 4
   - first:
       213: -1322552104181907468
     second: SWORDS_77
@@ -253,7 +253,7 @@ TextureImporter:
     second: SWORDS_82
   - first:
       213: -9037655066928614870
-    second: SWORDS_83
+    second: 77
   - first:
       213: -5621448299508486116
     second: SWORDS_84
@@ -289,7 +289,7 @@ TextureImporter:
     second: SWORDS_94
   - first:
       213: -273890779713464343
-    second: SWORDS_95
+    second: 9
   - first:
       213: -5235064080465927461
     second: SWORDS_96
@@ -325,7 +325,7 @@ TextureImporter:
     second: SWORDS_106
   - first:
       213: 7731002027648239951
-    second: SWORDS_107
+    second: 10
   - first:
       213: -5442436179168216717
     second: SWORDS_108
@@ -361,7 +361,7 @@ TextureImporter:
     second: SWORDS_118
   - first:
       213: 7523704020551704934
-    second: SWORDS_119
+    second: 8
   - first:
       213: -2681254664494495109
     second: SWORDS_120
@@ -871,7 +871,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_16
+      name: 2
       rect:
         serializedVersion: 2
         x: 64
@@ -913,7 +913,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 123213
+      name: 123
       rect:
         serializedVersion: 2
         x: 128
@@ -1249,7 +1249,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_34
+      name: 5
       rect:
         serializedVersion: 2
         x: 416
@@ -1291,7 +1291,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_36
+      name: 12
       rect:
         serializedVersion: 2
         x: 0
@@ -1312,7 +1312,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_37
+      name: 6
       rect:
         serializedVersion: 2
         x: 32
@@ -1459,7 +1459,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_44
+      name: 7
       rect:
         serializedVersion: 2
         x: 384
@@ -1795,7 +1795,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_60
+      name: 3
       rect:
         serializedVersion: 2
         x: 160
@@ -1879,7 +1879,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_64
+      name: 1
       rect:
         serializedVersion: 2
         x: 384
@@ -2131,7 +2131,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_76
+      name: 4
       rect:
         serializedVersion: 2
         x: 416
@@ -2278,7 +2278,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_83
+      name: 77
       rect:
         serializedVersion: 2
         x: 128
@@ -2530,7 +2530,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_95
+      name: 9
       rect:
         serializedVersion: 2
         x: 64
@@ -2782,7 +2782,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_107
+      name: 10
       rect:
         serializedVersion: 2
         x: 64
@@ -3034,7 +3034,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SWORDS_119
+      name: 8
       rect:
         serializedVersion: 2
         x: 160
