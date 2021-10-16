@@ -20,6 +20,7 @@ public class Merge : MonoBehaviour
     private GameObject item;
     public GameObject itemPrefabs;
 
+
     public Vector3 GetRandomPosition() // 랜덤 위치 받아오기
     {
         Vector3 basePosition = transform.position;
@@ -35,11 +36,16 @@ public class Merge : MonoBehaviour
 
     public void ItemCreate(int num) //아이템 크리에이트 (다음 아이템 만드는거 까지)
     {
+        
+
+
         Vector3 SpwanPos = GetRandomPosition();
         item = Instantiate(itemPrefabs, SpawnObject.transform.position, Quaternion.identity);  
         item.GetComponent<MergeItem>().InitItem(itemdata[num], SwordList);
         item.transform.DOMove(SpwanPos, 0.5f);
+         
 
+      
 
     }
 

@@ -14,6 +14,8 @@ public class MainMenu : Menu<MainMenu>
     private GameObject pnGroup;
     [SerializeField]
     private Button exitBtn;
+    [SerializeField]
+    private RectTransform highTr;
 
 
 
@@ -21,7 +23,6 @@ public class MainMenu : Menu<MainMenu>
     protected override void Awake()
     {
         base.Awake();
-        // 패널 , 버튼 그룹 리스트 추가 
         for (int i = 0; i < 4; i++)
         {
             int temp = i;
@@ -33,21 +34,21 @@ public class MainMenu : Menu<MainMenu>
 
             exitBtn.onClick.AddListener(() => ExitButton(temp));
         }
-        
+
     }
 
     private void Start()
     {
-        // 시작할때 닫기 
+
         panelList.ForEach(x => x.gameObject.SetActive(false));
         exitBtn.gameObject.SetActive(false);
     }
 
-    //패널 여는 버튼 
+
     public void MainButton(int i)
     {
         exitBtn.gameObject.SetActive(true);
-
+        highTr.anchoredPosition = new Vector3(0,660f);
         for (int temp = 0; temp < 4; temp++)
         {
             buttonList[temp].interactable = true;
@@ -56,19 +57,24 @@ public class MainMenu : Menu<MainMenu>
         buttonList[i].interactable = false;
         panelList[i].gameObject.SetActive(true);
     }
-    //패널 닫기 버튼 
+
     public void ExitButton(int i)
     {
+        highTr.anchoredPosition = new Vector3(0,451);
         panelList[i].gameObject.SetActive(false);
         buttonList[i].interactable = true;
         exitBtn.gameObject.SetActive(false);
     }
 
- 
+
 
     public override void OnBackPressed()
     {
-        Application.Quit();  
+        Application.Quit();
     }
 
+    public void Active(bool On)
+    {
+
+    }
 }
