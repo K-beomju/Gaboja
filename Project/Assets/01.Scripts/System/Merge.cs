@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
+
+
 
 [System.Serializable]
 public class Item
@@ -13,50 +16,65 @@ public class Item
 public class Merge : MonoBehaviour
 {
     public List<Item> itemdata = new List<Item>();
-    public GameObject SwordList;
-    public BoxCollider2D CreateArea;
 
-    public GameObject SpawnObject;
-    private GameObject item;
-    public GameObject itemPrefabs;
+    public Transform swordList;
+    public MergeItem itemPrefabs;
+    public Transform spawnObject;
+
+    private BoxCollider2D createArea;
+
+    public event Action<MergeItem, int> merge;
+
+    private void Awake()
+    {
+        createArea = GetComponent<BoxCollider2D>();
 
 
-    public Vector3 GetRandomPosition() // ·£´ı À§Ä¡ ¹Ş¾Æ¿À±â
+
+        merge = (x, y) =>
+        {
+            x.InitItem(itemdata[y], swordList);
+        };
+
+
+    }
+
+    public Vector3 GetRandomPosition()
     {
         Vector3 basePosition = transform.position;
-        Vector3 size = CreateArea.size;
+        Vector3 size = createArea.size;
 
-        float posX = basePosition.x + Random.Range(-size.x / 2.5f, size.x / 2.5f);
-        float posY = basePosition.y + Random.Range(-size.y / 2.5f, size.y / 2.5f);
+        float posX = basePosition.x + UnityEngine.Random.Range(-size.x / 2.5f, size.x / 2.5f);
+        float posY = basePosition.y + UnityEngine.Random.Range(-size.y / 2.5f, size.y / 2.5f);
 
         Vector3 randomPos = new Vector3(posX, posY, 0);
 
         return randomPos;
     }
 
-    public void ItemCreate(int num) //¾ÆÀÌÅÛ Å©¸®¿¡ÀÌÆ® (´ÙÀ½ ¾ÆÀÌÅÛ ¸¸µå´Â°Å ±îÁö)
+
+    // ì™œì¸ì§„ ëª¨ë¥´ê² ëŠ”ë° í’€ë§ê°¯ìˆ˜ê°€ ì´ˆê³¼í•˜ë©´ ìë™ìœ¼ë¡œ ë§‰ í•©ì³ì§€ëŠ” ë²„ê·¸ìˆìŒ ã…‹
+    public void ItemCreate(int num)
     {
-        
-
-
         Vector3 SpwanPos = GetRandomPosition();
-        item = Instantiate(itemPrefabs, SpawnObject.transform.position, Quaternion.identity);  
-        item.GetComponent<MergeItem>().InitItem(itemdata[num], SwordList);
-        item.transform.DOMove(SpwanPos, 0.5f);
-         
-
-      
-
+        //MergeItem mergeItem = Instantiate(itemPrefabs, SpawnObject.transform.position, Quaternion.identity);
+         MergeItem mergeItem = GameManager.instance.GetCreateSword();
+         mergeItem.transform.position = spawnObject.position;
+        merge(mergeItem, num);
+        mergeItem.transform.DOMove(SpwanPos, 0.5f);
     }
 
     public void MergeItem(int num)
     {
-        Vector3 MergePos = Input.mousePosition;
-        item = Instantiate(itemPrefabs, MergePos, Quaternion.identity);
-        item.GetComponent<MergeItem>().InitItem(itemdata[num], SwordList);
+        Vector3 mergePos = Input.mousePosition;
+        MergeItem mergeItem = GameManager.instance.GetCreateSword();
+        //MergeItem mergeItem = Instantiate(itemPrefabs, mergePos, Quaternion.identity);
+        mergeItem.transform.position = mergePos;
+        merge(mergeItem, num);
+
 
 
     }
 
-    
+
 }

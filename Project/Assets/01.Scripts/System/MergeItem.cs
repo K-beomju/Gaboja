@@ -6,20 +6,39 @@ using UnityEngine.UI;
 
 public class MergeItem : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
+    //private Merge merge;
+
+    private Image image;
+    private Item item;
+    private bool isSelect;
+    private GameObject contactItem;
+
     public Merge merge;
-    public Image sr;
-    public Item item;
-    public bool isSelect = false;
-    public GameObject contactItem;
 
-  
 
-    public void InitItem(Item i, GameObject swordList)
+    private void Awake()
+    {
+
+        image = GetComponent<Image>();
+        merge = FindObjectOfType<Merge>();
+    }
+    void OnEnable()
+    {
+        isSelect = false;
+    }
+
+    public void InitItem(Item i, Transform swordList)
     {
         item = i;
-        transform.SetParent(swordList.transform);
-        sr = GetComponent<Image>();
-        sr.sprite = item.SwordIMG;
+        transform.SetParent(swordList);
+        image.sprite = item.SwordIMG;
+
+        // í•¨ìˆ˜ë¥¼ ì‹¤í–‰ì‹œí‚¬ë•Œë§ˆë‹¤ Getcompnentë¥¼ ì‚¬ìš©í•˜ë©´ ì„±ëŠ¥ì— ì €í•˜ê°€ ë°œìƒë˜ê¸°ì—
+        // ë¯¸ë¦¬ ë³€ìˆ˜ë¡œ ë°›ì•„ë†”ì„œ ì‚¬ìš©í•˜ëŠ” ê²Œ ìµœì í™”ì— ì¢‹ìŒ
+        // item = i;
+        // transform.SetParent(swordList.transform);
+        // sr = GetComponent<Image>();
+        // sr.sprite = item.SwordIMG;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -29,41 +48,31 @@ public class MergeItem : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
     }
 
     public void OnPointerDown(PointerEventData eventData) {  }
-  
 
     public void OnPointerUp(PointerEventData eventData)
     {
-
-
-
-
         isSelect = false;
-        if (contactItem != null)
+        if (contactItem != null && contactItem.gameObject.activeSelf)
         {
-            Destroy(gameObject);
-            Destroy(contactItem);
-            //Merge¸¦ ÀÎ½ºÅÏ½ºÈ­ ½ÃÄÑ¼­ ¾ÆÀÌÅÛÅ©¸®¿¡ÀÌÆ® È£Ãâ (³ªÁß¿¡ ¼öÁ¤)
-            GameObject.Find("ItemData").GetComponent<Merge>().MergeItem(item.SwordID + 1);
-
-       
-
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
+            contactItem.SetActive(false);
+            contactItem.transform.SetParent(GameManager.instance.transform);
+            gameObject.transform.SetParent(GameManager.instance.transform);
+            //Destroy(contactItem);
+            merge.MergeItem(item.SwordID + 1);
         }
     }
 
 
-
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (isSelect && item.SwordID == collision.GetComponent<MergeItem>().item.SwordID)
         {
-            
             if (contactItem != null)
             {
                 contactItem = null;
             }
-
             contactItem = collision.gameObject;
         }
     }

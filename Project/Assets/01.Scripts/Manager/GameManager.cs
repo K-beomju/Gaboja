@@ -10,7 +10,12 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
 
     [SerializeField]
-    private PoolData poolData;
+    private PoolData poolData; // 풀링 데이터
+
+    [SerializeField]
+    private GameObject poolStorage; // 풀링 저장소
+
+
 
     private void Awake()
     {
@@ -24,6 +29,7 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
         poolData.Init(this.transform);
+
     }
 
 
@@ -32,6 +38,8 @@ public class GameManager : MonoBehaviour
     {
         return instance.poolData.swordPool.GetOrCreate();
     }
+
+
 
 
 }

@@ -8,16 +8,16 @@ public class MenuManager : MonoBehaviour
     private static MenuManager _instance;
     public static MenuManager Instance { get { return _instance; } }
 
-    // ¸Þ´ºµéÀ» ´ã¾ÆÁÙ ºÎ¸ð Æ®·£½ºÆû
+    // ï¿½Þ´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     [SerializeField]
     private Transform _menuParent;
 
 
-    // ¸Þ´º ¸Å´ÏÁ®¿¡¼­ °ü¸®ÇÒ °³º° ¸Þ´º Å¬·¡½ºµé
+    // ï¿½Þ´ï¿½ ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public MainMenu mainMenuPrefab;
    // public OptionMenu optionMenuPrefab;
 
-    // ½ºÅÃÀ¸·Î Äµ¹ö½º ¸Þ´ºµéÀ» °ü¸®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Äµï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private Stack<Menu> _menuStack = new Stack<Menu>();
 
 
@@ -53,29 +53,29 @@ public class MenuManager : MonoBehaviour
         }
         DontDestroyOnLoad(_menuParent.gameObject);
 
-        // ¸®ÇÃ·º¼ÇÀ» »ç¿ëÇÏ¿© ÇÔ¼öÅ¸ÀÔÀ» ¾ò¾î¿Í¼­ ÅëÇÕ½ÃÅ´
+        // ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½Ô¼ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¼ï¿½ ï¿½ï¿½ï¿½Õ½ï¿½Å´
         System.Type myType = this.GetType();
         BindingFlags myflags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly;
         FieldInfo[] fields = myType.GetFields(myflags);
 
-       
 
-        //µð¹ö±ë
+
+        //ï¿½ï¿½ï¿½ï¿½ï¿½
         for (int i = 0; i < fields.Length; i++)
         {
-            print("ÇÊµåÇÔ¼öµé : " + fields[i]);
+            print("ï¿½Êµï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ : " + fields[i]);
         }
 
-    
+
         foreach(FieldInfo field in fields)
         {
             Menu prefab = field.GetValue(this) as Menu;
-           
+
             if(prefab != null)
             {
                 Menu menuInstance = Instantiate(prefab, _menuParent);
 
-                // Ã³À½¿¡ ¿ÀÇÂÇÏ´Â ¸Þ´º´Â ¸ÞÀÎ¸Þ´º·Î ÇÏ°Ú´Ù
+                // Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Þ´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¸Þ´ï¿½ï¿½ï¿½ ï¿½Ï°Ú´ï¿½
                 if (prefab != mainMenuPrefab)
                 {
                     menuInstance.gameObject.SetActive(false);
@@ -93,7 +93,7 @@ public class MenuManager : MonoBehaviour
     {
         if (menuInstance == null)
         {
-            Debug.Log("¸Þ´º ¿ÀÇÂ ¿¡·¯");
+            Debug.Log("ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
 
@@ -113,7 +113,7 @@ public class MenuManager : MonoBehaviour
     {
         if(_menuStack.Count == 0)
         {
-            Debug.LogWarning("¸Þ´º ´Ý±â ¿¡·¯");
+            Debug.LogWarning("ï¿½Þ´ï¿½ ï¿½Ý±ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
 
@@ -122,7 +122,7 @@ public class MenuManager : MonoBehaviour
 
         if(_menuStack.Count > 0)
         {
-            // ±× ´ÙÀ½ ¸Þ´º¸¦ ²¨³»¼­ È°¼ºÈ­ ½ÃÄÑÁÜ (Á¦°Å´Â ¾ÈÇÔ) 
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½Å´ï¿½ ï¿½ï¿½ï¿½ï¿½)
             Menu nextMenu = _menuStack.Peek();
             nextMenu.gameObject.SetActive(true);
         }

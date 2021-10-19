@@ -23,9 +23,10 @@ public class PoolData : ScriptableObject
     public ObjectPooling<MergeItem> swordPool;
 
 
+
     public void Init(Transform transform)
     {
-        swordPool = new ObjectPooling<MergeItem>(sword,transform);
+        swordPool = new ObjectPooling<MergeItem>(sword,transform, 100);
     }
 
 
