@@ -5,38 +5,61 @@ using System;
 
 
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    public static GameManager instance = null;
 
+    [Header("PoolObjs")]
+    public List<GameObject> cavasEffect;
+    public List<GameObject> screenEffect;
+
+
+    private ObjectPooling<EffectObject>[] canvasEffectPool;
+    private ObjectPooling<EffectObject>[] screenEffectPool;
+
+    [Header("PoolTr")]
     [SerializeField]
-    private PoolData poolData; // 풀링 데이터
-
-    [SerializeField]
-    private GameObject poolStorage; // 풀링 저장소
+    private RectTransform mainCanvas;
 
 
-
-    private void Awake()
+    protected override void Awake()
     {
-        if(instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-        poolData.Init(this.transform);
+        base.Awake();
 
+        Load("Effect/Canvas", cavasEffect);
+        Load("Effect/Screen", screenEffect);
+
+        canvasEffectPool = new ObjectPooling<EffectObject>[cavasEffect.Count];
+        for (int i = 0; i < cavasEffect.Count; i++)
+        {
+            canvasEffectPool[i] = new ObjectPooling<EffectObject>(cavasEffect[i], mainCanvas.transform, 3);
+        }
+
+        screenEffectPool = new ObjectPooling<EffectObject>[screenEffect.Count];
+        for (int i = 0; i < cavasEffect.Count; i++)
+        {
+            screenEffectPool[i] = new ObjectPooling<EffectObject>(screenEffect[i], this.transform, 3);
+        }
+
+    }
+    public void Load(string subfolder, List<GameObject> list) // Load -> Casting -> List Add
+    {
+        object[] temp = Resources.LoadAll(subfolder);
+        for (int i = 0; i < temp.Length; i++)
+        {
+            GameObject go = temp[i] as GameObject;
+            list.Add(go);
+        }
     }
 
 
-
-    public MergeItem GetCreateSword()
+    public static EffectObject GetCreateCanvasEffect(int num)
     {
-        return instance.poolData.swordPool.GetOrCreate();
+        return Instance.canvasEffectPool[num].GetOrCreate();
+    }
+
+    public static EffectObject GetCreateScreenEffect(int num)
+    {
+        return Instance.screenEffectPool[num].GetOrCreate();
     }
 
 

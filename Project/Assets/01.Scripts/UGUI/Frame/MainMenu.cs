@@ -2,22 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
-public enum UIType
-{
-    Upgrade,
-    Item,
-    Relic
-}
 
-public class MainMenu : Menu<MainMenu>
+
+public class MainMenu : MonoBehaviour
 {
     private List<Button> buttonList = new List<Button>();
     private List<GameObject> panelList = new List<GameObject>();
 
     [Header("Etc")]
     [SerializeField]
-    private RectTransform backGround;
+    private Transform backGround; // 3.8 2.7
+    private Vector2 curPos;
 
     [Header("Mid Group")]
     [SerializeField]
@@ -25,40 +22,29 @@ public class MainMenu : Menu<MainMenu>
     [SerializeField]
     private Button exitBtn = null;
     [SerializeField]
-    private Image emeraldImage = null;
+    private GameObject emeraldObj = null;
 
 
     [Header("Low Group")]
     [SerializeField]
     private GameObject btnGroup = null;
-    [SerializeField]
-    private Button createBtn;
+
+    [Header("PanelGroup")]
+    public PanelContent panelContent;
 
 
 
-    [Header("Merge")]
-    [SerializeField]
-    private Merge merge = null;
-
-
-    [Header("Observer")]
-    //Shop은 데이터가 고정. 따라서 제외
-    public Observer upgradeUI;
-    public Observer itemUI;
-    public Observer RelicUI;
-
-    Subject subject = new Subject();
-
-
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
+
+
+        //        curPos = backGround.transform.position;
         for (int i = 0; i < 4; i++)
         {
             int temp = i;
             Button button = btnGroup.transform.GetChild(i).GetComponent<Button>();
-           // button.onClick.AddListener(() => MainButton(temp));
-            button.onClick.AddListener(() => OnClickOpen(temp));
+            button.onClick.AddListener(() => MainButton(temp));
+
 
             buttonList.Add(button);
 
@@ -66,7 +52,7 @@ public class MainMenu : Menu<MainMenu>
 
             exitBtn.onClick.AddListener(() => ExitButton(temp));
         }
-        createBtn.onClick.AddListener(() => merge.ItemCreate(0));
+
 
 
 
@@ -77,75 +63,54 @@ public class MainMenu : Menu<MainMenu>
 
         panelList.ForEach(x => x.gameObject.SetActive(false));
         exitBtn.gameObject.SetActive(false);
-        emeraldImage.gameObject.SetActive(false);
+        emeraldObj.gameObject.SetActive(false);
 
     }
 
 
     public void MainButton(int i)
     {
-        emeraldImage.gameObject.SetActive(true);
-        exitBtn.gameObject.SetActive(true);
-
-        backGround.anchoredPosition = new Vector3(0,660f);
-        for (int temp = 0; temp < 4; temp++)
+        Debug.Log("패널 그룹 On");
+        if (NullCheck())
         {
-            buttonList[temp].interactable = true;
-            panelList[temp].gameObject.SetActive(false);
+            panelContent.ButtonEvent();
+            GameObject a =  panelContent.panelList.Find(x => x.gameObject.activeSelf);
+            panelContent.scrollRect.content = a.GetComponent<RectTransform>();
+
+            emeraldObj.gameObject.SetActive(true);
+            exitBtn.gameObject.SetActive(true);
+
+            for (int temp = 0; temp < 4; temp++)
+            {
+                buttonList[temp].interactable = true;
+                panelList[temp].gameObject.SetActive(false);
+            }
+            buttonList[i].interactable = false;
+            panelList[i].gameObject.SetActive(true);
         }
-        buttonList[i].interactable = false;
-        panelList[i].gameObject.SetActive(true);
+
+
     }
 
     public void ExitButton(int i)
     {
-
-        backGround.anchoredPosition = new Vector3(0,451);
-        panelList[i].gameObject.SetActive(false);
-        buttonList[i].interactable = true;
-        exitBtn.gameObject.SetActive(false);
-        emeraldImage.gameObject.SetActive(false);
-
-    }
-
-
-    public void OnClickOpen(int type)
-    {
-        switch ((UIType)type)
+        if (NullCheck())
         {
-            case UIType.Upgrade:
-                // 강화창
-                subject.Message(Event.OnUpgrade);
-                upgradeUI.gameObject.SetActive(true);
-                subject.AddObserver(upgradeUI);
-                break;
-            case UIType.Item:
-                // 아이템창
-                itemUI.gameObject.SetActive(true);
-                subject.AddObserver(itemUI); break;
-            case UIType.Relic:
-                // 유물창
-                RelicUI.gameObject.SetActive(true);
-                subject.AddObserver(RelicUI); break;
+            // backGround.transform.position = curPos;
+            panelList[i].gameObject.SetActive(false);
+            buttonList[i].interactable = true;
+            exitBtn.gameObject.SetActive(false);
+            emeraldObj.gameObject.SetActive(false);
         }
+
     }
 
-
-    public void OnClickClose(int type)
+    public bool NullCheck()
     {
-        switch ((UIType)type)
-        {
-            case UIType.Upgrade:
-                upgradeUI.gameObject.SetActive(false); subject.RemoveObserver(upgradeUI);
-                break;
-            case UIType.Item:
-             itemUI.gameObject.SetActive(false); subject.RemoveObserver(itemUI);
-              break;
-            case UIType.Relic:
-             RelicUI.gameObject.SetActive(false); subject.RemoveObserver(RelicUI);
-              break;
-        }
+        return buttonList != null && panelList != null;
     }
+
+
 
 
 }
