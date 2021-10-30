@@ -28,16 +28,23 @@ public class GameManager : Singleton<GameManager>
         Load("Effect/Canvas", cavasEffect);
         Load("Effect/Screen", screenEffect);
 
-        canvasEffectPool = new ObjectPooling<EffectObject>[cavasEffect.Count];
-        for (int i = 0; i < cavasEffect.Count; i++)
+        if (canvasEffectPool != null)
         {
-            canvasEffectPool[i] = new ObjectPooling<EffectObject>(cavasEffect[i], mainCanvas.transform, 3);
+            canvasEffectPool = new ObjectPooling<EffectObject>[cavasEffect.Count];
+            for (int i = 0; i < cavasEffect.Count; i++)
+            {
+                canvasEffectPool[i] = new ObjectPooling<EffectObject>(cavasEffect[i], mainCanvas.transform, 3);
+            }
+
         }
 
-        screenEffectPool = new ObjectPooling<EffectObject>[screenEffect.Count];
-        for (int i = 0; i < cavasEffect.Count; i++)
+        if (screenEffectPool != null)
         {
-            screenEffectPool[i] = new ObjectPooling<EffectObject>(screenEffect[i], this.transform, 3);
+            screenEffectPool = new ObjectPooling<EffectObject>[screenEffect.Count];
+            for (int i = 0; i < cavasEffect.Count; i++)
+            {
+                screenEffectPool[i] = new ObjectPooling<EffectObject>(screenEffect[i], this.transform, 3);
+            }
         }
 
     }
@@ -46,6 +53,7 @@ public class GameManager : Singleton<GameManager>
         object[] temp = Resources.LoadAll(subfolder);
         for (int i = 0; i < temp.Length; i++)
         {
+
             GameObject go = temp[i] as GameObject;
             list.Add(go);
         }

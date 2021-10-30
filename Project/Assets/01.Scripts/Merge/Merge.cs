@@ -26,6 +26,8 @@ public class Merge : Singleton<Merge>
 
     [SerializeField] private DataClass data;
     [SerializeField] private GameObject itemPrefabs;
+    [SerializeField] private NewSwordPanel newSwordPanel;
+    [SerializeField] private Image test;
 
     private EffectObject effectObject;
     private BoxCollider2D createArea;
@@ -37,11 +39,7 @@ public class Merge : Singleton<Merge>
 
     public int ID{ get; set;}
     public GameObject parentObj;
-    public NewSwordPanel newSwordPanel;
     public int newSwordIndex = -1;
-
-
-
 
 
 
@@ -108,6 +106,10 @@ public class Merge : Singleton<Merge>
     {
         Vector3 randomPos = GetRandomPosition();
         magnetPos = randomPos;
+
+        test.gameObject.SetActive(true);
+        test.rectTransform.position = magnetPos;
+
         MergeItem sword = swordList[Random.Range(0, swordList.Count)];
         MergeItem swordFinding = null;
 
@@ -140,16 +142,20 @@ public class Merge : Singleton<Merge>
             swordList.Remove(sword);
             swordList.Remove(swordFinding);
 
-            Invoke("AutoMergeDelay", 1.3f);
+            StartCoroutine(AutoMergeDelay());
         }
     }
 
-    void AutoMergeDelay()
+    private IEnumerator AutoMergeDelay()
     {
+        yield return Yields.WaitSeconds(1.3f);
+        test.gameObject.SetActive(false);
         createSword(magnetPos, nextNum);
         effectObject = GameManager.GetCreateCanvasEffect(0);
         effectObject.SetPositionData(magnetPos, Quaternion.identity);
     }
+
+ 
 
     public void SortSword()
     {

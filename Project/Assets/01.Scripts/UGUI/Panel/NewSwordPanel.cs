@@ -22,6 +22,7 @@ public class NewSwordPanel : MonoBehaviour
     void Awake()
     {
         this.transform.localScale = Vector3.zero;
+        this.gameObject.SetActive(false);
         checkBtn.onClick.AddListener(() => OffPanel());
     }
 
@@ -31,8 +32,8 @@ public class NewSwordPanel : MonoBehaviour
     {
 
         swordImage.sprite = merge.itemdata[Merge.Instance.newSwordIndex].itemImg;
-        swordNameTxt.text = string.Format("{0}.{1}",  merge.itemdata[Merge.Instance.newSwordIndex].itemType + 1,merge.itemdata[Merge.Instance.newSwordIndex].swordName);
-                swordPowerTxt.text = string.Format("공격력 : {0}", merge.itemdata[Merge.Instance.newSwordIndex].swordPower.ToString("#만####"));
+        swordNameTxt.text = string.Format("{0}.{1}", merge.itemdata[Merge.Instance.newSwordIndex].itemType + 1, merge.itemdata[Merge.Instance.newSwordIndex].swordName);
+        swordPowerTxt.text = string.Format("공격력 : {0}", merge.itemdata[Merge.Instance.newSwordIndex].swordPower.ToString());
 
     }
 
