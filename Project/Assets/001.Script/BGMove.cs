@@ -4,56 +4,86 @@ using UnityEngine;
 
 public class BGMove : MonoBehaviour
 {
-    public float speed;
+    [SerializeField]
+    private MeshRenderer[] backGrounds;
+
+    [SerializeField]
+    [Tooltip("맨뒤 배경 속도")]
+    private float offsetBackSpeed;
+    private float offsetBack;
 
 
+    [SerializeField]
+    [Tooltip("중간 배경 속도")]
+    private float offsetMidSpeed;
+    private float offsetMid;
 
-    public Transform[] backgrounds;
+
+    [SerializeField]
+    [Tooltip("맨앞 배경 속도")]
+    private float offsetFrontSpeed;
+    private float offsetFront;
+    
+    [SerializeField]
+    [Tooltip("그라운드 속도")]
+    private float offsetGroundSpeed;
+    private float offsetGround;
+
+    [SerializeField]
+    [Tooltip("나무 배경 오브젝트")]
+    private GameObject subGround1;
+    [SerializeField]
+    [Tooltip("나무 배경 오브젝트")]
+    private GameObject subGround2;
+
+    [SerializeField]
+    float subGroundSpeed;
 
 
+    
+    Vector3 endPos = new Vector3(-5.74f,0,0);
+    Vector3 startPos = new Vector3(6, 0, 0);
 
-    float leftPosX = 0f;
-    float rightPosX = 0f;
-    float xScreenHalfSize;
-    float yScreenHalfSize;
-
-    public enum BGType
+    private void Start() 
     {
-       Ground,
-       Tree,
-       BIG_Tree,
-       BG_Back,
-       BG_Mid,
-       BG_Front
-
+        
+        backGrounds = GetComponentsInChildren<MeshRenderer>();
+    }
+    private void Update() 
+    {
+        
+        SubBackGroundMove();
+        BackGroundMove();
     }
 
-    public BGType bGType;
-    // Start is called before the first frame update
-    void Start()
+    public void BackGroundMove()
     {
-       yScreenHalfSize = Camera.main.orthographicSize;
-       xScreenHalfSize = yScreenHalfSize * Camera.main.aspect;
+        offsetBack += Time.deltaTime * offsetBackSpeed;
+        offsetMid += Time.deltaTime * offsetMidSpeed;
+        offsetFront += Time.deltaTime * offsetFrontSpeed;
+        offsetGround += Time.deltaTime * offsetGroundSpeed;
 
-       leftPosX = -(xScreenHalfSize * 2);
-       rightPosX = xScreenHalfSize * 2 * backgrounds.Length;
+        backGrounds[0].material.mainTextureOffset = new Vector2(offsetGround, 0);
+        backGrounds[1].material.mainTextureOffset = new Vector2(offsetBack , 0);
+        backGrounds[2].material.mainTextureOffset = new Vector2(offsetMid , 0);
+        backGrounds[3].material.mainTextureOffset = new Vector2(offsetFront, 0);
     }
-
-    // Update is called once per frame
-    void Update()
+    public void SubBackGroundMove()
     {
-      for(int i = 0; i < backgrounds.Length; i++)
-       {
-           backgrounds[i].position += new Vector3(-speed, 0, 0) * Time.deltaTime;
+        subGround1.transform.Translate(Vector3.left * subGroundSpeed * Time.deltaTime, Space.World);
+        subGround2.transform.Translate(Vector3.left * subGroundSpeed * Time.deltaTime, Space.World);
+        if (subGround1.transform.position.x < endPos.x)
+        {
+            subGround1.transform.position = startPos;
 
-           if(backgrounds[i].position.x < leftPosX)
-           {
-               Vector3 nextPos = backgrounds[i].position;
-               nextPos = new Vector3(nextPos.x + rightPosX, nextPos.y, nextPos.z);
-               backgrounds[i].position = nextPos;
-           }
-       }
+        }
+        if (subGround2.transform.position.x < endPos.x)
+        {
+            subGround2.transform.position = startPos;
+        }
     }
+    
+   
 
-
+    
 }

@@ -22,7 +22,7 @@ public class MergeUi : MonoBehaviour
 
     void Awake()
     {
-        createSwordBtn.onClick.AddListener(() => merge.ItemCreate(0));
+        createSwordBtn.onClick.AddListener(() => merge.ItemCreate(17));
         autoSortBtn.onClick.AddListener(() =>{
              merge.SortSword();
              StartCoroutine(CoolTimes(autoSortSlider, autoSortBtn, sortTime));

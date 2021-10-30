@@ -9,44 +9,51 @@ using System.Collections;
 [System.Serializable]
 public class Item
 {
-    public int itemType;
-    public Sprite itemImg;
-    public int swordID;
+    public Sprite itemImg; // 이미지
+    public int itemType; // 등급
+    public int swordID; // 고유 번호
+    public string swordName; // 이름
+    public int swordPower; // 공격력
 
 }
 
 public class Merge : Singleton<Merge>
 {
-    [SerializeField] private DataClass data;
-    [SerializeField] private RectTransform spawnPos;
-    [SerializeField] private RectTransform[] sortPos; // 정렬을 위한 트랜스폼의 위치입니다
     [SerializeField] private List<MergeItem> swordList = new List<MergeItem>();
+    [SerializeField] public List<Item> itemdata = new List<Item>();
+    [SerializeField] private RectTransform[] sortPos; // 정렬을 위한 트랜스폼의 위치입니다
+    [SerializeField] private RectTransform spawnPos;
 
+    [SerializeField] private DataClass data;
+    [SerializeField] private GameObject itemPrefabs;
 
     private EffectObject effectObject;
-
-
-    [HideInInspector]
-    public int ID{ get; set;}
-
-
-    public List<Item> itemdata = new List<Item>();
-    [SerializeField]
-    private GameObject itemPrefabs;
-    private GameObject go;
-
-    [SerializeField]
     private BoxCollider2D createArea;
-    public GameObject parentObj;
+    private GameObject sword;
     private Vector3 magnetPos;
-    private int nextNum = 0;
-    public MergeItem merge;
+    private int nextNum;
+
+
+
+    public int ID{ get; set;}
+    public GameObject parentObj;
+    public NewSwordPanel newSwordPanel;
+    public int newSwordIndex = -1;
+
+
+
+
+
+
 
 
 
     protected override void Awake()
     {
         base.Awake();
+
+        nextNum = 0;
+        createArea = GetComponent<BoxCollider2D>();
     }
 
 
@@ -78,12 +85,14 @@ public class Merge : Singleton<Merge>
 
     public GameObject createSword(Vector3 pos, int num)
     {
-        go = Instantiate(itemPrefabs, pos, Quaternion.identity);
-        MergeItem item = go.GetComponent<MergeItem>();
+        sword = Instantiate(itemPrefabs, pos, Quaternion.identity);
+        MergeItem item = sword.GetComponent<MergeItem>();
         item.InitItem(itemdata[num]);
 
         swordList.Add(item);
-        return go;
+        CheckNewSword(item.item.itemType);
+
+        return sword;
     }
 
     public void mergingItem(int num)
@@ -157,6 +166,20 @@ public class Merge : Singleton<Merge>
     {
         swordList.Remove(mergeItem);
         Destroy(mergeItem.gameObject);
+    }
+
+
+    public void CheckNewSword(int itemType)
+    {
+        if(itemType > newSwordIndex)
+        {
+            Debug.Log("새로운 검 획득");
+            newSwordIndex = itemType;
+            newSwordPanel.Init();
+            newSwordPanel.gameObject.SetActive(true);
+
+
+        }
     }
 
 

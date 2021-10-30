@@ -6,20 +6,22 @@ using DG.Tweening;
 
 public class NewSwordPanel : MonoBehaviour
 {
-    public Image swordImage;
-    public Image lightImage;
-    public Button checkBtn;
+    [SerializeField] private Image swordImage;
+    [SerializeField] private Image lightImage;
+    [SerializeField] private Button checkBtn;
+    [SerializeField] private float speed;
+    [SerializeField] private Merge merge;
 
-    public float speed;
-    public Merge merge;
+
+    [SerializeField] private Text swordNameTxt;
+    [SerializeField] private Text swordPowerTxt;
+
     private Sequence mySequence;
-
-    public Text swordNameTxt;
-    public Text swordAttackTxt;
-
+    private string test;
 
     void Awake()
     {
+        this.transform.localScale = Vector3.zero;
         checkBtn.onClick.AddListener(() => OffPanel());
     }
 
@@ -27,7 +29,11 @@ public class NewSwordPanel : MonoBehaviour
 
     public void Init()
     {
-        swordImage.sprite =  merge.itemdata[1].itemImg;
+
+        swordImage.sprite = merge.itemdata[Merge.Instance.newSwordIndex].itemImg;
+        swordNameTxt.text = string.Format("{0}.{1}",  merge.itemdata[Merge.Instance.newSwordIndex].itemType + 1,merge.itemdata[Merge.Instance.newSwordIndex].swordName);
+                swordPowerTxt.text = string.Format("공격력 : {0}", merge.itemdata[Merge.Instance.newSwordIndex].swordPower.ToString("#만####"));
+
     }
 
     void OnEnable()
@@ -37,7 +43,7 @@ public class NewSwordPanel : MonoBehaviour
      {
          transform.localScale = Vector3.zero;
      })
-     .Append(transform.DOScale(1, 0.5f));
+     .Append(transform.DOScale(0.5f, 0.5f));
 
     }
 
@@ -53,7 +59,6 @@ public class NewSwordPanel : MonoBehaviour
 
     void Update()
     {
-
         Rotate();
     }
 
