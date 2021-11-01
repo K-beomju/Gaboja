@@ -33,6 +33,8 @@ public abstract class Menu<T> : Menu where T : Menu<T>
             MenuManager.Instance.OpenMenu(Instance);
         }
     }
+
+
 }
 
 

@@ -6,39 +6,36 @@ using System;
 
 
 
-public class MainMenu : MonoBehaviour
+public class MainMenu : Singleton<MainMenu>
 {
     private List<Button> buttonList = new List<Button>();
     private List<GameObject> panelList = new List<GameObject>();
 
-    [Header("Etc")]
-    [SerializeField]
-    private Transform backGround; // 3.8 2.7
-    private Vector2 curPos;
 
     [Header("Mid Group")]
-    [SerializeField]
-    private GameObject pnGroup = null;
-    [SerializeField]
-    private Button exitBtn = null;
-    [SerializeField]
-    private GameObject emeraldObj = null;
+    [SerializeField] private GameObject pnGroup;
+    [SerializeField] private Button exitBtn;
+    [SerializeField] private GameObject emeraldObj;
+
 
 
     [Header("Low Group")]
-    [SerializeField]
-    private GameObject btnGroup = null;
+    [SerializeField] private GameObject btnGroup;
+
+
 
     [Header("PanelGroup")]
     public PanelContent panelContent;
 
 
 
-    private void Awake()
+
+
+    protected override void Awake()
     {
 
+        base.Awake();
 
-        //        curPos = backGround.transform.position;
         for (int i = 0; i < 4; i++)
         {
             int temp = i;
@@ -55,7 +52,6 @@ public class MainMenu : MonoBehaviour
 
 
 
-
     }
 
     private void Start()
@@ -67,6 +63,8 @@ public class MainMenu : MonoBehaviour
 
     }
 
+
+    // Low UI - ButtonGroup
 
     public void MainButton(int i)
     {
@@ -96,7 +94,6 @@ public class MainMenu : MonoBehaviour
     {
         if (NullCheck())
         {
-            // backGround.transform.position = curPos;
             panelList[i].gameObject.SetActive(false);
             buttonList[i].interactable = true;
             exitBtn.gameObject.SetActive(false);
@@ -105,10 +102,14 @@ public class MainMenu : MonoBehaviour
 
     }
 
+
+
     public bool NullCheck()
     {
         return buttonList != null && panelList != null;
     }
+
+
 
 
 

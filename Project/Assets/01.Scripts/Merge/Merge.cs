@@ -24,10 +24,13 @@ public class Merge : Singleton<Merge>
     [SerializeField] private RectTransform[] sortPos; // 정렬을 위한 트랜스폼의 위치입니다
     [SerializeField] private RectTransform spawnPos;
 
-    [SerializeField] private DataClass data;
-    [SerializeField] private GameObject itemPrefabs;
     [SerializeField] private NewSwordPanel newSwordPanel;
-    [SerializeField] private Image test;
+    [SerializeField] private DataClass dataClass;
+    [SerializeField] private MergeUi mergeUi;
+
+    [SerializeField] private GameObject itemPrefabs;
+    [SerializeField] private Image magnetImage;
+
 
     private EffectObject effectObject;
     private BoxCollider2D createArea;
@@ -37,9 +40,10 @@ public class Merge : Singleton<Merge>
 
 
 
+
     public int ID{ get; set;}
     public GameObject parentObj;
-    public int newSwordIndex = -1;
+    public  int newSwordIndex = -1;
 
 
 
@@ -67,17 +71,15 @@ public class Merge : Singleton<Merge>
     }
     public void ItemCreate(int num)
     {
-        if (data.sword > 0)
+        if (mergeUi.sword > 0)
         {
             Vector3 randomPos = GetRandomPosition();
             GameObject go = createSword(spawnPos.position, num);
-            go.transform.DOMove(randomPos, 1f);
-            data.sword--;
-            UiManager.Instance.SetSword();
-            if (data.sword < data.swordMax && !UiManager.Instance.bRelad)
-            {
-                UiManager.Instance.ReloadSword();
-            }
+             go.transform.DOMove(randomPos, 1f);
+            mergeUi.sword--;
+            UiManager.Instance.SetSword(mergeUi.sword);
+
+
         }
     }
 
@@ -104,11 +106,15 @@ public class Merge : Singleton<Merge>
 
     public void AutoMerge(int num)
     {
+        if(!mergeUi.bAutoMerge) return;
+
         Vector3 randomPos = GetRandomPosition();
         magnetPos = randomPos;
 
-        test.gameObject.SetActive(true);
-        test.rectTransform.position = magnetPos;
+        magnetImage.gameObject.SetActive(true);
+        magnetImage.rectTransform.position = magnetPos;
+        effectObject =  GameManager.GetCreateCanvasEffect(1);
+        effectObject.SetPositionData(magnetPos, Quaternion.identity);
 
         MergeItem sword = swordList[Random.Range(0, swordList.Count)];
         MergeItem swordFinding = null;
@@ -149,13 +155,12 @@ public class Merge : Singleton<Merge>
     private IEnumerator AutoMergeDelay()
     {
         yield return Yields.WaitSeconds(1.3f);
-        test.gameObject.SetActive(false);
+        magnetImage.gameObject.SetActive(false);
         createSword(magnetPos, nextNum);
         effectObject = GameManager.GetCreateCanvasEffect(0);
         effectObject.SetPositionData(magnetPos, Quaternion.identity);
     }
 
- 
 
     public void SortSword()
     {
@@ -175,18 +180,28 @@ public class Merge : Singleton<Merge>
     }
 
 
+    //Fix
     public void CheckNewSword(int itemType)
     {
         if(itemType > newSwordIndex)
         {
-            Debug.Log("새로운 검 획득");
+
             newSwordIndex = itemType;
             newSwordPanel.Init();
             newSwordPanel.gameObject.SetActive(true);
+            Debug.Log("활성화 해야지");
+
+
 
 
         }
+
     }
+
+
+
+
+
 
 
 

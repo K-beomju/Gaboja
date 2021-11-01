@@ -5,39 +5,38 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public Slider slider;
+    private SpriteRenderer playerRender;
+    private Animator playerAni;
 
-    public static Player instance;
-    public int playerHp;
-    public int maxHp = 200;
-    public GameObject player;
-    [SerializeField]
-    Animator playerAni;
-    public SpriteRenderer playerRender;
-    public Text hpTxt;
-    public float remainHp;
+   // public int playerHp;
+  //  public int maxHp = 200;
+   // public float remainHp;
+
+  //  public Slider slider;
+  //  public Text hpTxt;
 
     public int attackRange;
     private EffectObject effectObject;
 
-    private void Awake() {
-        instance = this;
+
+    private void Awake()
+    {
+
+        playerAni = GetComponent<Animator>();
+        playerRender = GetComponent<SpriteRenderer>();
     }
     void Start()
     {
-        playerHp = maxHp;
-        remainHp = (playerHp / maxHp * 100);
-        hpTxt.text = string.Format("{0} ({1}%)",playerHp,remainHp);
-        playerRender = GetComponent<SpriteRenderer>();
-        player = this.gameObject;
-        playerAni = GetComponent<Animator>();
+  //      playerHp = maxHp;
+ //       remainHp = (playerHp / maxHp * 100);
+//        hpTxt.text = string.Format("{0} ({1}%)",playerHp,remainHp);
     }
 
     public void SetHp(float current, float max)
     {
-        slider.value = current / max;
-        remainHp = (current / max * 100);
-        hpTxt.text = string.Format("{0} ({1}%)",current, remainHp );
+   //     slider.value = current / max;
+ //       remainHp = (current / max * 100);
+  //      hpTxt.text = string.Format("{0} ({1}%)",current, remainHp );
     }
 
     // Update is called once per frame
@@ -62,29 +61,7 @@ public class Player : MonoBehaviour
     }
 
 
-    public void Attack()
-    {
-        Collider2D objects = Physics2D.OverlapCircle(transform.position, attackRange, 1 << LayerMask.NameToLayer("Enemy"));
-        var target = objects.GetComponent<Enemy>();
-            if (target != null)
-            {
-        target.GetComponent<Rigidbody2D>().AddForce(transform.right * 0.5f,ForceMode2D.Impulse);
 
-                Debug.Log(target.name);
-                target.OnDamage(10);
-                effectObject = GameManager.GetCreateScreenEffect(0);
-                effectObject.SetPositionData(target.transform.position + new Vector3(0,0.3f,0), Quaternion.identity);
-            }
-
-
-    }
-
-       void OnDrawGizmos()
-    {
-
-
-        Gizmos.DrawWireSphere(transform.position,attackRange);
-    }
 
 
 }

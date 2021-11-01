@@ -8,17 +8,18 @@ using UnityEngine.UI;
 public class PanelContent : MonoBehaviour
 {
     [Header("Upgrade Panel")]
-    public List<Button> buttonList = new List<Button>();
-    public List<Image> imageList = new List<Image>();
+    [SerializeField] private List<Button> buttonList = new List<Button>();
+    [SerializeField] private List<Image> imageList = new List<Image>();
+
+    [SerializeField] private  GameObject parentObj;
+    [SerializeField] private GameObject pnGroup ;
+
+    [SerializeField] private Sprite sprite;
+    private Sprite mySprite;
+
     public List<GameObject> panelList = new List<GameObject>();
-    public GameObject parentObj = null;
-    public GameObject pnGroup = null;
-    public Sprite sprite;
-    public Sprite mySprite;
     public ScrollRect scrollRect;
-
-
-
+    public RectTransform rectContent;
 
     void Awake()
     {
@@ -59,7 +60,7 @@ public class PanelContent : MonoBehaviour
 
         GameObject a =  panelList.Find(x => x.gameObject.activeSelf);
             scrollRect.content = a.GetComponent<RectTransform>();
-
+           
     }
 
     public void ChangeSprite(int i)

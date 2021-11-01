@@ -10,9 +10,9 @@ public class JsonSave : MonoBehaviour
 {
     const string saveFileName = "jsonFile.sav"; // 절대 바뀌지 않을 이름 const or readOnly
 
+    public DataClass dataClass;
 
-    [SerializeField]
-    public DataClass data;
+
 
     string getFilePath(string fileName)
     {
@@ -31,7 +31,7 @@ public class JsonSave : MonoBehaviour
         {
             print("Save to : " + getFilePath(saveFileName));
 
-            string jsonString = JsonUtility.ToJson(data); // jsonString에 통으로 저장됌
+            string jsonString = JsonUtility.ToJson(dataClass); // jsonString에 통으로 저장됌
 
             StreamWriter sw = new StreamWriter(getFilePath(saveFileName));
 
@@ -51,7 +51,7 @@ public class JsonSave : MonoBehaviour
                 string jsonString = sr.ReadToEnd();
                 sr.Close();
 
-                JsonUtility.FromJsonOverwrite(jsonString,data); // 덮어쓰기
+                JsonUtility.FromJsonOverwrite(jsonString,dataClass); // 덮어쓰기
 
                 print(jsonString);
             }

@@ -8,6 +8,8 @@ using System;
 public class GameManager : Singleton<GameManager>
 {
 
+
+
     [Header("PoolObjs")]
     public List<GameObject> cavasEffect;
     public List<GameObject> screenEffect;
@@ -28,15 +30,12 @@ public class GameManager : Singleton<GameManager>
         Load("Effect/Canvas", cavasEffect);
         Load("Effect/Screen", screenEffect);
 
-        if (canvasEffectPool != null)
+        canvasEffectPool = new ObjectPooling<EffectObject>[cavasEffect.Count];
+        for (int i = 0; i < cavasEffect.Count; i++)
         {
-            canvasEffectPool = new ObjectPooling<EffectObject>[cavasEffect.Count];
-            for (int i = 0; i < cavasEffect.Count; i++)
-            {
-                canvasEffectPool[i] = new ObjectPooling<EffectObject>(cavasEffect[i], mainCanvas.transform, 3);
-            }
-
+            canvasEffectPool[i] = new ObjectPooling<EffectObject>(cavasEffect[i], mainCanvas.transform, 3);
         }
+
 
         if (screenEffectPool != null)
         {
@@ -48,6 +47,8 @@ public class GameManager : Singleton<GameManager>
         }
 
     }
+
+
     public void Load(string subfolder, List<GameObject> list) // Load -> Casting -> List Add
     {
         object[] temp = Resources.LoadAll(subfolder);

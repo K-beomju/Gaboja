@@ -12,8 +12,11 @@ public class MenuManager : MonoBehaviour
     private Transform _menuParent;
 
 
+    public GameObject battleScreen;
+    public Canvas mainCanvas;
 
-    public MainMenu mainMenuPrefab;
+    public StartMenu startMenuPrefab;
+    public LoadMenu loadMenuPrefab;
 
     private Stack<Menu> _menuStack = new Stack<Menu>();
 
@@ -50,25 +53,32 @@ public class MenuManager : MonoBehaviour
         }
         DontDestroyOnLoad(_menuParent.gameObject);
 
+        // ���÷����� ����Ͽ� �Լ�Ÿ���� ���ͼ� ���ս�Ŵ
         System.Type myType = this.GetType();
         BindingFlags myflags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly;
         FieldInfo[] fields = myType.GetFields(myflags);
 
+        FieldInfo[] type = this.GetType().
+            GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+
+
+
+
+        //�����
         for (int i = 0; i < fields.Length; i++)
         {
             print("�ʵ��Լ��� : " + fields[i]);
         }
 
-
         foreach(FieldInfo field in fields)
         {
             Menu prefab = field.GetValue(this) as Menu;
-
             if(prefab != null)
             {
                 Menu menuInstance = Instantiate(prefab, _menuParent);
 
-                if (prefab != mainMenuPrefab)
+                // ó���� �����ϴ� �޴��� ���θ޴��� �ϰڴ�
+                if (prefab != startMenuPrefab)
                 {
                     menuInstance.gameObject.SetActive(false);
                 }
@@ -114,6 +124,7 @@ public class MenuManager : MonoBehaviour
 
         if(_menuStack.Count > 0)
         {
+            // �� ���� �޴��� ������ Ȱ��ȭ ������ (���Ŵ� ����)
             Menu nextMenu = _menuStack.Peek();
             nextMenu.gameObject.SetActive(true);
         }
