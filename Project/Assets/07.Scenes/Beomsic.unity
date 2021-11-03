@@ -894,7 +894,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1232526659
 Transform:
   m_ObjectHideFlags: 0
@@ -26863,7 +26863,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 338354305956247925}
   m_HandleRect: {fileID: 0}
@@ -27523,7 +27523,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 338354305191019740}
   m_HandleRect: {fileID: 0}
@@ -36417,6 +36417,7 @@ MonoBehaviour:
   swordSlider: {fileID: 338354305141885643}
   sortSlider: {fileID: 338354305953443487}
   autoMergeSlider: {fileID: 338354305521670975}
+  autoCreateSlider: {fileID: 338354305555428624}
   sortTime: 3
   mergeTime: 3
   createTime: 3
@@ -36424,7 +36425,8 @@ MonoBehaviour:
   merge: {fileID: 7134729748708574406}
   noficationPopup: {fileID: 1330318947}
   sword: 0
-  bRelad: 0
+  isCreateReload: 0
+  isAutoMerge: 0
 --- !u!1 &338354305865682250
 GameObject:
   m_ObjectHideFlags: 0
@@ -38935,7 +38937,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 338354306512980053}
   m_HandleRect: {fileID: 0}

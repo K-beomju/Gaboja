@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System;
 
 public class MergeUi : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class MergeUi : MonoBehaviour
     [SerializeField] private Slider swordSlider;
     [SerializeField] private Slider sortSlider;
     [SerializeField] private Slider autoMergeSlider;
+    [SerializeField] private Slider autoCreateSlider;
+
 
     [SerializeField] private float sortTime;
     [SerializeField] private float mergeTime;
@@ -31,8 +34,13 @@ public class MergeUi : MonoBehaviour
 
 
     public int sword;
-    public bool bCreateReload = false;
-    public bool bAutoMerge = false;
+    public bool isCreateReload = false;
+    public bool isAutoMerge = false;
+
+
+    public delegate void MergeDel();
+    public event MergeDel mergeDel;
+
 
     void Awake()
     {
@@ -45,13 +53,12 @@ public class MergeUi : MonoBehaviour
         sortBtn.onClick.AddListener(() =>
         {
             merge.SortSword();
-            StartCoroutine(CoolTimes(sortSlider, sortBtn, sortTime));
+            StartCoroutine(SortCO(sortSlider, sortBtn, sortTime));
         });
 
         autoMergeBtn.onClick.AddListener(() =>
         {
-            merge.AutoMerge(0);
-        //    StartCoroutine(CoolTimes(autoMergeSlider, autoMergeBtn, mergeTime));
+            // merge.AutoMerge();
 
 
         });
@@ -62,44 +69,68 @@ public class MergeUi : MonoBehaviour
     {
         sword = dataClass.swordMax;
         UiManager.Instance.SetSword(sword);
-        StartCoroutine(CoolTimes(autoMergeSlider, autoMergeBtn, mergeTime));
+        StartCoroutine(SortCO(sortSlider, sortBtn, sortTime));
+        AutoSystem(0);
+         AutoSystem(1);
 
     }
 
-    public void CoolTime(Slider slider, Button button, float coolTime)
-    {
-        StartCoroutine(CoolTimes(slider, button, coolTime));
-    }
 
-    public IEnumerator CoolTimes(Slider slider, Button button, float coolTime)
+    public IEnumerator SortCO(Slider slider, Button button, float coolTime)
     {
         slider.value = 0;
-
+        button.interactable = false;
         while (slider.value < 1)
         {
             slider.value += 1 * Time.smoothDeltaTime / coolTime;
 
             yield return null;
         }
-
-
-            merge.AutoMerge(0);
-
-
-
-
+        button.interactable = true;
         yield break;
     }
 
+    public void AutoSystem(int i)
+    {
+        switch (i)
+        {
+            case 0:
+                StartCoroutine(AutoSystemCO(autoMergeSlider, mergeTime, merge.AutoMerge));
+                break;
 
+            case 1:
+                StartCoroutine(AutoSystemCO(autoCreateSlider, createTime, () => { merge.ItemCreate(0); }));
+                break;
+
+        }
+
+    }
+
+    public IEnumerator AutoSystemCO(Slider slider, float coolTime, Action func)
+    {
+
+        slider.value = 0;
+        if (slider.value != 1)
+        {
+            while (slider.value < 1)
+            {
+                slider.value += 1 * Time.smoothDeltaTime / coolTime;
+                yield return null;
+            }
+
+        }
+
+        func();
+        yield break;
+    }
 
     public IEnumerator Reload() // 재충전 , SwordCreateBtn
     {
-        if (sword < dataClass.swordMax && !bCreateReload)
+        if (sword < dataClass.swordMax && !isCreateReload)
         {
             swordFill.fillAmount = 1;
             swordSlider.value = 0;
-            bCreateReload = true;
+            isCreateReload = true;
             while (swordFill.fillAmount > 0)
             {
                 swordFill.fillAmount -= 1 * Time.smoothDeltaTime / createTime;
@@ -108,7 +139,7 @@ public class MergeUi : MonoBehaviour
             }
             sword++;
             UiManager.Instance.SetSword(sword);
-            bCreateReload = false;
+            isCreateReload = false;
 
             if (sword != dataClass.swordMax)
             {

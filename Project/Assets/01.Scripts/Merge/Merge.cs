@@ -36,14 +36,13 @@ public class Merge : Singleton<Merge>
     private BoxCollider2D createArea;
     private GameObject sword;
     private Vector3 magnetPos;
+
     private int nextNum;
+    private bool isMerge = false;
 
-
-
-
-    public int ID{ get; set;}
+    public int ID { get; set; }
     public GameObject parentObj;
-    public  int newSwordIndex = -1;
+    public int newSwordIndex = -1;
 
 
 
@@ -69,15 +68,23 @@ public class Merge : Singleton<Merge>
         return randomPos;
 
     }
+
+
+
+
+
+    // Create
+
     public void ItemCreate(int num)
     {
         if (mergeUi.sword > 0)
         {
             Vector3 randomPos = GetRandomPosition();
             GameObject go = createSword(spawnPos.position, num);
-             go.transform.DOMove(randomPos, 1f);
+            go.transform.DOMove(randomPos, 1f);
             mergeUi.sword--;
             UiManager.Instance.SetSword(mergeUi.sword);
+            mergeUi.AutoSystem(1);
 
 
         }
@@ -95,105 +102,143 @@ public class Merge : Singleton<Merge>
         return sword;
     }
 
+    public IEnumerator CreateSword()
+    {
+        yield return null;
+    }
+
+
+
+
+    // Merge
+
+
     public void mergingItem(int num)
     {
         Vector3 Pos = Input.mousePosition;
         effectObject = GameManager.GetCreateCanvasEffect(0);
         effectObject.SetPositionData(Pos, Quaternion.identity);
         GameObject go = createSword(Pos, num);
+
     }
 
-
-    public void AutoMerge(int num)
+    public void AutoMerge()
     {
-        if(!mergeUi.bAutoMerge) return;
+        StartCoroutine(SearchSword());
+    }
 
+     private IEnumerator SearchSword() // Error - 검이 없으면 에러남 index 에러
+    {
+
+        MergeItem swordFinding = null;
+        MergeItem sword = null;
+
+        while (swordFinding == null ) // swordFinding가 null이면 계속 반복
+        {
+            sword = swordList[Random.Range(0, swordList.Count)];
+            foreach (var i in swordList)
+            {
+                if (i.item.itemType == sword.item.itemType &&
+                   i.item.swordID != sword.item.swordID) //타입이 같고 , 아이디가 다른 객체찾기
+                {
+                    swordFinding = i;
+                }
+            }
+            if(swordFinding == null)
+            {
+            yield return Yields.WaitSeconds(3f);
+            }
+            Debug.Log("같은 등급의 검을 찾는 중");
+            yield return null;
+        }
+
+        //찾으면 실행
         Vector3 randomPos = GetRandomPosition();
         magnetPos = randomPos;
+        StartCoroutine(AutoMergeDelay(sword,swordFinding, randomPos));
+        Debug.Log("AutoMergeDelay 실행");
+        yield break;
+    }
 
+
+    private IEnumerator AutoMergeDelay(MergeItem sword, MergeItem swordFinding, Vector3 randomPos)
+    {
+        isMerge = true;
+        // 자석 이미지 활성화, 이펙트 풀링
         magnetImage.gameObject.SetActive(true);
         magnetImage.rectTransform.position = magnetPos;
-        effectObject =  GameManager.GetCreateCanvasEffect(1);
+        effectObject = GameManager.GetCreateCanvasEffect(1);
         effectObject.SetPositionData(magnetPos, Quaternion.identity);
 
-        MergeItem sword = swordList[Random.Range(0, swordList.Count)];
-        MergeItem swordFinding = null;
 
-        //같은 칼 검색
-        foreach (var i in swordList)
-        {
-            if (i.item.itemType == sword.item.itemType &&
-               i.item.swordID != sword.item.swordID) //타입이 같고 , 아이디가 다른 객체찾기
-            {
-                swordFinding = i;
-            }
-        }
-
-        if (swordFinding == null)
-        {
+        sword.transform.DOMove(randomPos, 1f);   // 검 이동
+        swordFinding.transform.DOMove(randomPos, 1f);
 
 
-        }
-        if (swordFinding != null)
-        {
-            sword.transform.DOMove(randomPos, 1f);
-            swordFinding.transform.DOMove(randomPos, 1f);
-
-            nextNum = swordFinding.item.itemType + 1;
+        nextNum = swordFinding.item.itemType + 1;    // 검 등급 증가 --> 나중에 제작술을 만들게 되면 확률 구성을 해야함
 
 
-            Destroy(swordFinding.gameObject, 1.3f);
-            Destroy(sword.gameObject, 1.3f);
+        Dead(sword, 1.3f);  // Dead F12 누르면 함수 설명으로 이동
+        Dead(swordFinding, 1.3f);
 
-            swordList.Remove(sword);
-            swordList.Remove(swordFinding);
 
-            StartCoroutine(AutoMergeDelay());
-        }
-    }
+        yield return Yields.WaitSeconds(1.3f);  // Yields F12 누르면 함수 설명으로 이동
 
-    private IEnumerator AutoMergeDelay()
-    {
-        yield return Yields.WaitSeconds(1.3f);
+
+        createSword(magnetPos, nextNum); // 검 제작
+
+         // 자석 이미지 비활성화, 이펙트 풀링
         magnetImage.gameObject.SetActive(false);
-        createSword(magnetPos, nextNum);
         effectObject = GameManager.GetCreateCanvasEffect(0);
         effectObject.SetPositionData(magnetPos, Quaternion.identity);
+
+        isMerge = false;
+        mergeUi.AutoSystem(0);
+
+        yield break; // 종료
+
     }
 
 
+
+
+
+
+
+
+
+
+    // Etc
     public void SortSword()
     {
+        if(!isMerge)
+        {
+
         //단 이 로직으로 할 경우 합치는 도중에 정렬을 해버리면 합쳐지는 녀석은 DOTween이 무시됨. 합쳐지고 았을 때는 정렬이 안되도록 막는 로직이 필요함.
         swordList = swordList.OrderByDescending(x => x.item.itemType).ToList();
         for (int i = 0; i < swordList.Count; i++)
         {
             swordList[i].transform.DOMove(sortPos[i].transform.position, 1);
         }
+        }
 
     }
 
-    public void Dead(MergeItem mergeItem)
+
+    public void Dead(MergeItem mergeItem, float count = 0)
     {
         swordList.Remove(mergeItem);
-        Destroy(mergeItem.gameObject);
+        Destroy(mergeItem.gameObject, count);
     }
 
-
-    //Fix
     public void CheckNewSword(int itemType)
     {
-        if(itemType > newSwordIndex)
+        if (itemType > newSwordIndex)
         {
 
             newSwordIndex = itemType;
             newSwordPanel.Init();
             newSwordPanel.gameObject.SetActive(true);
-            Debug.Log("활성화 해야지");
-
-
-
-
         }
 
     }

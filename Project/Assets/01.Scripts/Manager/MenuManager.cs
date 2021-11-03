@@ -64,11 +64,11 @@ public class MenuManager : MonoBehaviour
 
 
 
-        //�����
-        for (int i = 0; i < fields.Length; i++)
-        {
-            print("�ʵ��Լ��� : " + fields[i]);
-        }
+        // //�����
+        // for (int i = 0; i < fields.Length; i++)
+        // {
+        //     print("�ʵ��Լ��� : " + fields[i]);
+        // }
 
         foreach(FieldInfo field in fields)
         {
