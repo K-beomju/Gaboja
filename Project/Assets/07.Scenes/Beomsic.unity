@@ -1155,7 +1155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1330318944
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36422,7 +36422,7 @@ MonoBehaviour:
   autoCreateSlider: {fileID: 338354305555428624}
   sortTime: 3
   mergeTime: 3
-  createTime: 3
+  createTime: 1
   dataClass: {fileID: 1250993914}
   merge: {fileID: 7134729748708574406}
   noficationPopup: {fileID: 1330318947}
@@ -36430,6 +36430,7 @@ MonoBehaviour:
   sword: 0
   isCreateReload: 0
   isAutoMerge: 0
+  isAutoCreate: 0
 --- !u!1 &338354305865682250
 GameObject:
   m_ObjectHideFlags: 0

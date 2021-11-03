@@ -36,6 +36,7 @@ public class MergeUi : MonoBehaviour
     public int sword;
     public bool isCreateReload;
     public bool isAutoMerge = true;
+    public bool isAutoCreate = true;
 
 
     public delegate void MergeDel();
@@ -71,7 +72,7 @@ public class MergeUi : MonoBehaviour
         UiManager.Instance.SetSword(sword);
         StartCoroutine(SortCO(sortSlider, sortBtn, sortTime));
         AutoSystem(0);
-        // AutoSystem(1);
+        AutoSystem(1);
 
     }
 
@@ -95,18 +96,18 @@ public class MergeUi : MonoBehaviour
         switch (i)
         {
             case 0:
-                StartCoroutine(AutoSystemCO(autoMergeSlider, mergeTime, merge.AutoMerge));
+                StartCoroutine(AutoSystemCO(autoMergeSlider, mergeTime, merge.AutoMerge, isAutoMerge));
                 break;
 
             case 1:
-                StartCoroutine(AutoSystemCO(autoCreateSlider, createTime, () => { merge.ItemCreate(0); }));
+                StartCoroutine(AutoSystemCO(autoCreateSlider, createTime, () => { merge.AutoItemCreate(0); } , isAutoCreate));
                 break;
 
         }
 
     }
 
-    public IEnumerator AutoSystemCO(Slider slider, float coolTime, Action func)
+    public IEnumerator AutoSystemCO(Slider slider, float coolTime, Action func, bool isStart)
     {
 
         slider.value = 0;
@@ -120,7 +121,7 @@ public class MergeUi : MonoBehaviour
 
         }
 
-        while(isAutoMerge)
+        while(isStart)
         {
             yield return Yields.WaitSeconds(3f);
             Debug.Log("대기중");

@@ -85,9 +85,27 @@ public class Merge : Singleton<Merge>
             mergeUi.sword--;
             UiManager.Instance.SetSword(mergeUi.sword);
 
-
         }
     }
+
+
+     public void AutoItemCreate(int num)
+    {
+        if (mergeUi.sword > 0)
+        {
+            Vector3 randomPos = GetRandomPosition();
+            GameObject go = createSword(spawnPos.position, num);
+            go.transform.DOMove(randomPos, 1f);
+            mergeUi.sword--;
+            UiManager.Instance.SetSword(mergeUi.sword);
+            mergeUi.AutoSystem(1);
+        }
+    }
+
+
+
+
+
 
     public GameObject createSword(Vector3 pos, int num)
     {
@@ -97,7 +115,6 @@ public class Merge : Singleton<Merge>
 
         swordList.Add(item);
         CheckNewSword(item.item.itemType);
-
         return sword;
     }
 
