@@ -7,11 +7,22 @@ using DG.Tweening;
 public class NoficationPopup : MonoBehaviour
 {
     [SerializeField] private Text itemActiveTxt;
+    [SerializeField] private Button checkButton;
+    [SerializeField] private MergeUi mergeUi;
 
     private Sequence mySequence;
 
+    void Awake()
+    {
+        checkButton.onClick.AddListener(() =>
+        {
+            this.gameObject.SetActive(false);
+            Test();
+        });
+    }
 
-     void OnEnable()
+
+    void OnEnable()
     {
         mySequence = DOTween.Sequence()
      .OnStart(() =>
@@ -20,13 +31,33 @@ public class NoficationPopup : MonoBehaviour
      })
      .Append(transform.DOScale(1, 0.6f));
 
-    }
 
-    public void Init(string name, string on)
+
+
+    }
+    public void Test()
     {
-        itemActiveTxt.text = string.Format("{0}을 {1}시겠습니까?", name, on);
-        gameObject.SetActive(true);
+        if (mergeUi.isAutoMerge)
+        {
+            itemActiveTxt.text = "자석을 끄시겠습니까?";
+            mergeUi.isAutoMerge = false;
+            mergeUi.autoMergeTxt.text = "ON";
+            mergeUi.autoMergeTxt.color = Color.green;
 
+        }
+        else
+        {
+            itemActiveTxt.text = "자석을 켜시겠습니까?";
+            mergeUi.isAutoMerge = true;
+            mergeUi.autoMergeTxt.text = "OFF";
+            mergeUi.autoMergeTxt.color = Color.red;
+
+
+        }
     }
+
+
+
+
 
 }

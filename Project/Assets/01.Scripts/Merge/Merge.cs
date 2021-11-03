@@ -84,7 +84,6 @@ public class Merge : Singleton<Merge>
             go.transform.DOMove(randomPos, 1f);
             mergeUi.sword--;
             UiManager.Instance.SetSword(mergeUi.sword);
-            mergeUi.AutoSystem(1);
 
 
         }
@@ -133,7 +132,7 @@ public class Merge : Singleton<Merge>
         MergeItem swordFinding = null;
         MergeItem sword = null;
 
-        while (swordFinding == null ) // swordFinding가 null이면 계속 반복
+        while (swordFinding == null) // swordFinding가 null이면 계속 반복
         {
             sword = swordList[Random.Range(0, swordList.Count)];
             foreach (var i in swordList)

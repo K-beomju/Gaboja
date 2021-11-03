@@ -16,8 +16,6 @@ public class MergeUi : MonoBehaviour
     [SerializeField] private Text countTxt;
     [SerializeField] private Image swordFill;
 
-
-
     [SerializeField] private Slider swordSlider;
     [SerializeField] private Slider sortSlider;
     [SerializeField] private Slider autoMergeSlider;
@@ -32,10 +30,12 @@ public class MergeUi : MonoBehaviour
     [SerializeField] private Merge merge;
     [SerializeField] private NoficationPopup noficationPopup;
 
+    public Text autoMergeTxt;
+
 
     public int sword;
-    public bool isCreateReload = false;
-    public bool isAutoMerge = false;
+    public bool isCreateReload;
+    public bool isAutoMerge = true;
 
 
     public delegate void MergeDel();
@@ -58,8 +58,7 @@ public class MergeUi : MonoBehaviour
 
         autoMergeBtn.onClick.AddListener(() =>
         {
-            // merge.AutoMerge();
-
+            noficationPopup.gameObject.SetActive(true);
 
         });
 
@@ -67,11 +66,12 @@ public class MergeUi : MonoBehaviour
 
     void Start()
     {
+        isCreateReload = true;
         sword = dataClass.swordMax;
         UiManager.Instance.SetSword(sword);
         StartCoroutine(SortCO(sortSlider, sortBtn, sortTime));
         AutoSystem(0);
-         AutoSystem(1);
+        // AutoSystem(1);
 
     }
 
@@ -120,17 +120,26 @@ public class MergeUi : MonoBehaviour
 
         }
 
+        while(isAutoMerge)
+        {
+            yield return Yields.WaitSeconds(3f);
+            Debug.Log("대기중");
+            yield return null;
+        }
         func();
         yield break;
     }
 
+
+
     public IEnumerator Reload() // 재충전 , SwordCreateBtn
     {
-        if (sword < dataClass.swordMax && !isCreateReload)
+        if (sword < dataClass.swordMax && isCreateReload)
         {
+            Debug.Log("Reload 실행");
             swordFill.fillAmount = 1;
             swordSlider.value = 0;
-            isCreateReload = true;
+            isCreateReload = false;
             while (swordFill.fillAmount > 0)
             {
                 swordFill.fillAmount -= 1 * Time.smoothDeltaTime / createTime;
@@ -139,7 +148,7 @@ public class MergeUi : MonoBehaviour
             }
             sword++;
             UiManager.Instance.SetSword(sword);
-            isCreateReload = false;
+            isCreateReload = true;
 
             if (sword != dataClass.swordMax)
             {
