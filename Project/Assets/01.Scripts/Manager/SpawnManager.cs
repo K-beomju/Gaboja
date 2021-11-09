@@ -2,34 +2,66 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class SpawnManager : MonoBehaviour
 {
-     public GameObject[] enemyType;
-     public GameObject spawnPos;
-     public int count; //에네미 마리수
-    public  List<GameObject> SpawnEnemys = new List<GameObject>();
+    [SerializeField] private List<GameObject> enemyList;
+    [SerializeField] private List<GameObject> battleList;
 
-    // Start is called before the first frame update
+    private ObjectPooling<EnemyMove>[] enemyCreatePool;
+    private readonly int stageCount = 4;
+    public int enemyCount;
+
+    [SerializeField] private Transform spawnPos;
+
+    public int stage;
+
+    void Awake()
+    {
+        GameManager.Load("Enemy",enemyList);
+
+        enemyCreatePool = new ObjectPooling<EnemyMove>[enemyList.Count];
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            enemyCreatePool[i] = new ObjectPooling<EnemyMove>(enemyList[i], this.transform, 3);
+        }
+
+    }
+
     void Start()
     {
-        StartCoroutine( SpawnEnemy());
+        StartCoroutine(SpawnEnemy());
     }
 
-    public void Spawn()
-    {
-
-        int selection = Random.Range(0, enemyType.Length);
-        GameObject selectedObj = enemyType[selection];
-        SpawnEnemys.Add(Instantiate(selectedObj, spawnPos.transform.position, Quaternion.identity));
-    }
 
     public IEnumerator SpawnEnemy()
     {
-        for (int i = 0; i < count; i++)
+
+
+        while(battleList.Count != enemyCount)
         {
-            Spawn();
+             int rand = Random.Range(0,3);
+            EnemyMove enemyMove = enemyCreatePool[rand].GetOrCreate();
+            enemyMove.transform.position = spawnPos.position;
+            enemyMove.RandSpeed();
+            battleList.Add(enemyList[rand].gameObject);
+            yield return Yields.WaitSeconds(0.1f);
+            yield return null;
         }
-        yield return new WaitForSeconds(8f);
-        StartCoroutine(SpawnEnemy());
+
+        yield return null;
     }
+
+
+
+    public EnemyMove GetCreateEnemy(int num)
+    {
+        return enemyCreatePool[num].GetOrCreate();
+    }
+
+
+
+
+
 }

@@ -25,8 +25,8 @@ public class Merge : Singleton<Merge>
     [SerializeField] private RectTransform spawnPos;
 
     [SerializeField] private NewSwordPanel newSwordPanel;
-    [SerializeField] private DataClass dataClass;
     [SerializeField] private MergeUi mergeUi;
+    [SerializeField] private UiManager uiManager;
 
     [SerializeField] private GameObject itemPrefabs;
     [SerializeField] private Image magnetImage;
@@ -48,7 +48,6 @@ public class Merge : Singleton<Merge>
 
 
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -56,6 +55,19 @@ public class Merge : Singleton<Merge>
         nextNum = 0;
         createArea = GetComponent<BoxCollider2D>();
     }
+
+
+
+
+
+
+
+
+    public int currentSword()
+    {
+        return swordList.Count;
+    }
+
 
 
     public Vector3 GetRandomPosition() // 랜덤 위치 받아오기
@@ -77,13 +89,14 @@ public class Merge : Singleton<Merge>
 
     public void ItemCreate(int num)
     {
-        if (mergeUi.sword > 0)
+        if (uiManager.sword > 0)
         {
             Vector3 randomPos = GetRandomPosition();
             GameObject go = createSword(spawnPos.position, num);
             go.transform.DOMove(randomPos, 1f);
-            mergeUi.sword--;
-            UiManager.Instance.SetSword(mergeUi.sword);
+             uiManager.sword--;
+            uiManager.SetMakeSword();
+            uiManager.SetCountSword();
 
         }
     }
@@ -91,14 +104,19 @@ public class Merge : Singleton<Merge>
 
      public void AutoItemCreate(int num)
     {
-        if (mergeUi.sword > 0)
+        if (uiManager.sword > 0)
         {
             Vector3 randomPos = GetRandomPosition();
             GameObject go = createSword(spawnPos.position, num);
             go.transform.DOMove(randomPos, 1f);
-            mergeUi.sword--;
-            UiManager.Instance.SetSword(mergeUi.sword);
-            mergeUi.AutoSystem(1);
+
+            uiManager.sword--;
+            uiManager.SetMakeSword();
+            uiManager.SetCountSword();
+
+
+            mergeUi.AutoSystem("모루");
+            mergeUi.ReloadCo();
         }
     }
 
@@ -118,12 +136,6 @@ public class Merge : Singleton<Merge>
         return sword;
     }
 
-    public IEnumerator CreateSword()
-    {
-        yield return null;
-    }
-
-
 
 
     // Merge
@@ -132,9 +144,12 @@ public class Merge : Singleton<Merge>
     public void mergingItem(int num)
     {
         Vector3 Pos = Input.mousePosition;
+
         effectObject = GameManager.GetCreateCanvasEffect(0);
         effectObject.SetPositionData(Pos, Quaternion.identity);
         GameObject go = createSword(Pos, num);
+        uiManager.SetCountSword();
+
 
     }
 
@@ -160,13 +175,15 @@ public class Merge : Singleton<Merge>
                     swordFinding = i;
                 }
             }
-            if(swordFinding == null)
+            if(swordFinding == null && !mergeUi.isAutoMerge)
             {
             yield return Yields.WaitSeconds(3f);
-            }
             Debug.Log("같은 등급의 검을 찾는 중");
+            }
             yield return null;
         }
+
+
 
         //찾으면 실행
         Vector3 randomPos = GetRandomPosition();
@@ -209,7 +226,9 @@ public class Merge : Singleton<Merge>
         effectObject.SetPositionData(magnetPos, Quaternion.identity);
 
         isMerge = false;
-        mergeUi.AutoSystem(0);
+        mergeUi.AutoSystem("자석");
+        uiManager.SetCountSword();
+
 
         yield break; // 종료
 

@@ -173,7 +173,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &7404190298937263145
 MonoBehaviour:
@@ -228,7 +228,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadSlider: {fileID: 7404190299964834491}
-  battleScreen: {fileID: 0}
 --- !u!1 &7404190299311002151
 GameObject:
   m_ObjectHideFlags: 0

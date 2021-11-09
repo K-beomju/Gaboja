@@ -6,13 +6,13 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
-public class MergeItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class MergeItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IEndDragHandler
 {
     private Image image;
     private GameObject contactItem; // contactItem을 GameObject로 두고 MergeItem getcomponent 유발 -> 그냥 MergeItem으로 놓고 쓰면 됌
     private bool isSelect;
     private bool readyAuto;
-
+    private Vector2 lastMousePosition;
     public Item item;
 
 
@@ -94,12 +94,46 @@ public class MergeItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
     public void OnDrag(PointerEventData eventData)
     {
         isSelect = true;
-        Vector3 mousePos = Input.mousePosition;
-        transform.position = mousePos;
+        Vector2 mousePos = Input.mousePosition;
+        Vector2 diff = mousePos - lastMousePosition;
+        RectTransform rect = GetComponent<RectTransform>();
+
+        Vector3 newPosition = rect.position +  new Vector3(diff.x, diff.y, transform.position.z);
+        Vector3 oldPos = rect.position;
+        rect.position = newPosition;
+        if(!IsRectTransformInsideSreen(rect))
+        {
+            rect.position = oldPos;
+            mousePos = oldPos;
+        }
+        lastMousePosition = mousePos;
+
     }
 
+    private bool IsRectTransformInsideSreen(RectTransform rectTransform)
+    {
+        bool isInside = false;
+        Vector3[] corners = new Vector3[4];
+        rectTransform.GetWorldCorners(corners);
+        int visibleCorners = 0;
+        //경계영역
+        Rect rect = new Rect(0,170,Screen.width, 846.83f);
+        foreach(Vector3 corner in corners)
+        {
+            if(rect.Contains(corner))
+            {
+                visibleCorners++;
+            }
+        }
+        if(visibleCorners == 4)
+        {
+            isInside = true;
+        }
+        return isInside;
+    }
 
-
-
-
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        lastMousePosition = eventData.position;
+    }
 }

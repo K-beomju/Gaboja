@@ -4,54 +4,35 @@ using UnityEngine;
 
 public class BGMove : MonoBehaviour
 {
-    [SerializeField]
-    private MeshRenderer[] backGrounds;
 
-    [SerializeField]
-    [Tooltip("맨뒤 배경 속도")]
-    private float offsetBackSpeed;
+    [SerializeField] private MeshRenderer[] backGrounds;
+
+    [SerializeField] private float offsetBackSpeed;
     private float offsetBack;
 
-
-    [SerializeField]
-    [Tooltip("중간 배경 속도")]
-    private float offsetMidSpeed;
+    [SerializeField]private float offsetMidSpeed;
     private float offsetMid;
 
-
-    [SerializeField]
-    [Tooltip("맨앞 배경 속도")]
-    private float offsetFrontSpeed;
-    private float offsetFront;
-    
-    [SerializeField]
-    [Tooltip("그라운드 속도")]
-    private float offsetGroundSpeed;
+    [SerializeField]private float offsetGroundSpeed;
     private float offsetGround;
 
-    [SerializeField]
-    [Tooltip("나무 배경 오브젝트")]
-    private GameObject subGround1;
-    [SerializeField]
-    [Tooltip("나무 배경 오브젝트")]
-    private GameObject subGround2;
 
-    [SerializeField]
-    float subGroundSpeed;
+   [SerializeField] private GameObject subGround1;
+   [SerializeField] private GameObject subGround2;
 
+   [SerializeField] private float subGroundSpeed;
 
-    
-    Vector3 endPos = new Vector3(-5.74f,0,0);
-    Vector3 startPos = new Vector3(6, 0, 0);
+    private Vector3 endPos = new Vector3(-5.74f,0,0);
+    private Vector3 startPos;
 
-    private void Start() 
+    private void Start()
     {
-        
+        startPos  = new Vector3(6,transform.position.y,0);
         backGrounds = GetComponentsInChildren<MeshRenderer>();
     }
-    private void Update() 
+    private void Update()
     {
-        
+
         SubBackGroundMove();
         BackGroundMove();
     }
@@ -60,13 +41,11 @@ public class BGMove : MonoBehaviour
     {
         offsetBack += Time.deltaTime * offsetBackSpeed;
         offsetMid += Time.deltaTime * offsetMidSpeed;
-        offsetFront += Time.deltaTime * offsetFrontSpeed;
         offsetGround += Time.deltaTime * offsetGroundSpeed;
 
-        backGrounds[0].material.mainTextureOffset = new Vector2(offsetGround, 0);
-        backGrounds[1].material.mainTextureOffset = new Vector2(offsetBack , 0);
-        backGrounds[2].material.mainTextureOffset = new Vector2(offsetMid , 0);
-        backGrounds[3].material.mainTextureOffset = new Vector2(offsetFront, 0);
+        backGrounds[0].material.mainTextureOffset = new Vector2(offsetBack , 0);
+        backGrounds[1].material.mainTextureOffset = new Vector2(offsetMid , 0);
+        backGrounds[2].material.mainTextureOffset = new Vector2(offsetGround, 0);
     }
     public void SubBackGroundMove()
     {
@@ -82,8 +61,8 @@ public class BGMove : MonoBehaviour
             subGround2.transform.position = startPos;
         }
     }
-    
-   
 
-    
+
+
+
 }

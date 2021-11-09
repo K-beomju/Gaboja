@@ -5,12 +5,20 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 
+public enum MergeUICategory
+{
+    AutoMerge = 0,
+    AutoCreate = 1
+}
+
 public class MergeUi : MonoBehaviour
 {
     [Header("UI")]
+    [SerializeField] private Button createSwordBtn;
     [SerializeField] private Button sortBtn;
     [SerializeField] private Button autoMergeBtn;
-    [SerializeField] private Button createSwordBtn;
+    [SerializeField] private Button autoCreateBtn;
+
 
     [Header("CreateButton")]
     [SerializeField] private Text countTxt;
@@ -20,27 +28,28 @@ public class MergeUi : MonoBehaviour
     [SerializeField] private Slider sortSlider;
     [SerializeField] private Slider autoMergeSlider;
     [SerializeField] private Slider autoCreateSlider;
+    [SerializeField] private Slider autoDiaMineSlider;
+    [SerializeField] private Slider autoEmeraldMinSlider;
 
 
-    [SerializeField] private float sortTime;
-    [SerializeField] private float mergeTime;
-    [SerializeField] private float createTime;
-
-    [SerializeField] private DataClass dataClass;
     [SerializeField] private Merge merge;
     [SerializeField] private NoficationPopup noficationPopup;
+    [SerializeField] private Image diaImage;
+    [SerializeField] private Image emeraldImage;
 
     public Text autoMergeTxt;
+    public Text autoCreateTxt;
 
 
-    public int sword;
+
     public bool isCreateReload;
-    public bool isAutoMerge = true;
-    public bool isAutoCreate = true;
+    public bool isAutoMerge;
+    public bool isAutoCreate;
 
 
-    public delegate void MergeDel();
-    public event MergeDel mergeDel;
+    [SerializeField] private JsonSave json;
+    [SerializeField] private UiManager uiManager;
+
 
 
     void Awake()
@@ -54,12 +63,20 @@ public class MergeUi : MonoBehaviour
         sortBtn.onClick.AddListener(() =>
         {
             merge.SortSword();
-            StartCoroutine(SortCO(sortSlider, sortBtn, sortTime));
+            StartCoroutine(SortCO(sortSlider, sortBtn, json.GetDataClass().sortTime));
         });
 
         autoMergeBtn.onClick.AddListener(() =>
         {
             noficationPopup.gameObject.SetActive(true);
+            noficationPopup.Init((int)MergeUICategory.AutoMerge);
+
+        });
+
+         autoCreateBtn.onClick.AddListener(() =>
+        {
+            noficationPopup.gameObject.SetActive(true);
+               noficationPopup.Init((int)MergeUICategory.AutoCreate);
 
         });
 
@@ -67,12 +84,18 @@ public class MergeUi : MonoBehaviour
 
     void Start()
     {
+        isAutoCreate = true;
+        isAutoMerge = true;
         isCreateReload = true;
-        sword = dataClass.swordMax;
-        UiManager.Instance.SetSword(sword);
-        StartCoroutine(SortCO(sortSlider, sortBtn, sortTime));
-        AutoSystem(0);
-        AutoSystem(1);
+
+
+        StartCoroutine(SortCO(sortSlider, sortBtn,  json.GetDataClass().sortTime));
+
+        AutoSystem("자석");
+        AutoSystem("모루");
+        AutoSystem("다이아채굴");
+        AutoSystem("에메랄드채굴");
+
 
     }
 
@@ -91,29 +114,45 @@ public class MergeUi : MonoBehaviour
         yield break;
     }
 
-    public void AutoSystem(int i)
+    public void AutoSystem(string i)
     {
         switch (i)
         {
-            case 0:
-                StartCoroutine(AutoSystemCO(autoMergeSlider, mergeTime, merge.AutoMerge, isAutoMerge));
-                break;
+            case "자석":
+                StartCoroutine(AutoSystemCO(autoMergeSlider,  json.GetDataClass().autoMergeTime,
+                merge.AutoMerge, isAutoMerge, MergeUICategory.AutoMerge));
+            break;
 
-            case 1:
-                StartCoroutine(AutoSystemCO(autoCreateSlider, createTime, () => { merge.AutoItemCreate(0); } , isAutoCreate));
-                break;
+            case "모루":
+                StartCoroutine(AutoSystemCO(autoCreateSlider,  json.GetDataClass().autoCreateTime,
+                () => { merge.AutoItemCreate(0); } , isAutoCreate,  MergeUICategory.AutoCreate));
+            break;
+
+            case "다이아채굴":
+                StartCoroutine(AutoMine(autoDiaMineSlider,  json.GetDataClass().autoDiaMineTime , diaImage));
+            break;
+
+             case "에메랄드채굴":
+                StartCoroutine(AutoMine(autoEmeraldMinSlider,  json.GetDataClass().autoDiaMineTime , emeraldImage));
+            break;
 
         }
 
     }
 
-    public IEnumerator AutoSystemCO(Slider slider, float coolTime, Action func, bool isStart)
+    public void ReloadCo()
+    {
+        StartCoroutine(Reload());
+
+    }
+
+    public IEnumerator AutoSystemCO(Slider slider, float coolTime, Action func, bool isStart, MergeUICategory mergeUICategory)
     {
 
         slider.value = 0;
         if (slider.value != 1)
         {
-            while (slider.value < 1)
+            while (slider.value < 1) // 슬라이더의 값이 1 미만일때까지 실행
             {
                 slider.value += 1 * Time.smoothDeltaTime / coolTime;
                 yield return null;
@@ -121,10 +160,13 @@ public class MergeUi : MonoBehaviour
 
         }
 
-        while(isStart)
+
+
+           isStart = noficationPopup.SearchBool((int)mergeUICategory);
+        while(!isStart) // isStart가 false때 실행
         {
+             isStart = noficationPopup.SearchBool((int)mergeUICategory);
             yield return Yields.WaitSeconds(3f);
-            Debug.Log("대기중");
             yield return null;
         }
         func();
@@ -133,9 +175,10 @@ public class MergeUi : MonoBehaviour
 
 
 
+
     public IEnumerator Reload() // 재충전 , SwordCreateBtn
     {
-        if (sword < dataClass.swordMax && isCreateReload)
+        if (uiManager.sword != json.GetDataClass().swordMax &&isCreateReload)
         {
             Debug.Log("Reload 실행");
             swordFill.fillAmount = 1;
@@ -143,21 +186,36 @@ public class MergeUi : MonoBehaviour
             isCreateReload = false;
             while (swordFill.fillAmount > 0)
             {
-                swordFill.fillAmount -= 1 * Time.smoothDeltaTime / createTime;
-                swordSlider.value += 1 * Time.smoothDeltaTime / createTime;
+                swordFill.fillAmount -= 1 * Time.smoothDeltaTime /  json.GetDataClass().createSwordTime;
+                swordSlider.value += 1 * Time.smoothDeltaTime /  json.GetDataClass().createSwordTime;
                 yield return null;
             }
-            sword++;
-            UiManager.Instance.SetSword(sword);
+           uiManager.sword++;
+           uiManager.SetMakeSword();
             isCreateReload = true;
 
-            if (sword != dataClass.swordMax)
+            if (uiManager.sword != json.GetDataClass().swordMax)
             {
                 StartCoroutine(Reload());
             }
 
             yield break;
         }
+
+    }
+
+
+     public IEnumerator AutoMine(Slider slider, float coolTime , Image image)
+    {
+        slider.value = 0;
+        while (slider.value < 1)
+        {
+            slider.value += 1 * Time.smoothDeltaTime / coolTime;
+
+            yield return null;
+        }
+        image.gameObject.SetActive(true);
+        yield break;
     }
 
 
