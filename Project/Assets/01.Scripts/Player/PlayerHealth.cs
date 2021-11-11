@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : LivingEntity
 {
     private EffectObject effectObject;
     private DamageText damageText;
+
+    public Slider hpSlider;
+    public Text hpText;
 
 
     protected override void OnEnable()
@@ -13,15 +17,22 @@ public class PlayerHealth : LivingEntity
         base.OnEnable();
     }
 
-    private void Start()
+    void Start()
     {
+        SetFill();
+    }
 
+    public void SetFill()
+    {
+        hpSlider.value = health  / initHealth;
+        hpText.text = string.Format("{0} [{1}]%",health ,  (health / initHealth * 100).ToString());
     }
 
     public override void OnDamage(float damage)
     {
         if (dead) return;
         base.OnDamage(damage);
+        SetFill();
        // StartCoroutine(ShowBloodEffect(point, normal));
     }
 
@@ -44,7 +55,7 @@ public class PlayerHealth : LivingEntity
 
             collision.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.right * 2.5f, ForceMode2D.Impulse);
             OnDamage(damge);
-            Debug.Log(health);
+
         }
 
     }

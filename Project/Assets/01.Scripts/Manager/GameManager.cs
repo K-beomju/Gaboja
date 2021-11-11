@@ -26,6 +26,10 @@ public class GameManager : Singleton<GameManager>
    [SerializeField] private RectTransform battleCanvas;
 
 
+
+   [SerializeField] private BackGroundMove backGroundMove;
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -72,6 +76,10 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void BackMove(bool isAttack)
+    {
+        backGroundMove.isAttack = isAttack;
+    }
 
     public static EffectObject GetCreateCanvasEffect(int num)
     {

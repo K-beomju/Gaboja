@@ -9,6 +9,7 @@ public class PlayerAttack : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerAnimation playerAnim;
     public int attackRange;
+    public Merge merge;
 
 
     private void Awake()
@@ -27,8 +28,10 @@ public class PlayerAttack : MonoBehaviour
     }
 
 
-
-
+    public void SwordAttack()
+    {
+        merge.SwordInit();
+    }
 
 
     public void OnDrawGizmos()

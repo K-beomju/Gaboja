@@ -5,6 +5,18 @@ using System;
 
 
 [Serializable]
+public class PlayerDataInfo
+{
+    public float hp;
+
+    public PlayerDataInfo()
+    {
+        hp = 200;
+    }
+}
+
+
+[Serializable]
 public class EnemyDataInfo
 {
     public float enemyDamage;
@@ -12,7 +24,7 @@ public class EnemyDataInfo
 
     public EnemyDataInfo()
     {
-        enemyDamage = 3;
+        enemyDamage = 1;
         bossDamage = 10;
     }
 }

@@ -236,13 +236,6 @@ public class Merge : Singleton<Merge>
 
 
 
-
-
-
-
-
-
-
     // Etc
     public void SortSword()
     {
@@ -274,6 +267,21 @@ public class Merge : Singleton<Merge>
             newSwordIndex = itemType;
             newSwordPanel.Init();
             newSwordPanel.gameObject.SetActive(true);
+        }
+
+    }
+
+
+
+    // ATTACK
+
+    public void SwordInit()
+    {
+
+        for (int i = 0; i < swordList.Count; i++)
+        {
+            Debug.Log(swordList[i].item.swordName);
+
         }
 
     }

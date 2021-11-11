@@ -17,11 +17,13 @@ public class PlayerAnimation : MonoBehaviour
     {
         if(raycast)
         {
+            GameManager.Instance.BackMove(false);
             animator.SetBool(hashMove, false);
             animator.SetBool(hashAttack, true);
         }
         else
         {
+            GameManager.Instance.BackMove(true);
             animator.SetBool(hashMove,true);
             animator.SetBool(hashAttack, false);
         }

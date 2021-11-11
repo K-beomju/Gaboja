@@ -31,9 +31,11 @@ public class MergeItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
         item.itemType = i.itemType;
         item.itemImg = i.itemImg;
         item.swordID = Merge.Instance.ID++; //고유 아이디 부여
-
-
         image.sprite = item.itemImg;
+
+        item.swordName = i.swordName;
+        item.swordPower = i.swordPower;
+
         image.transform.SetParent(Merge.Instance.parentObj.transform);
 
 

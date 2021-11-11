@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BGMove : MonoBehaviour
+public class BackGroundMove : MonoBehaviour
 {
 
     [SerializeField] private MeshRenderer[] backGrounds;
@@ -25,6 +25,8 @@ public class BGMove : MonoBehaviour
     private Vector3 endPos = new Vector3(-5.74f,0,0);
     private Vector3 startPos;
 
+    public bool isAttack = true;
+
     private void Start()
     {
         startPos  = new Vector3(6,transform.position.y,0);
@@ -32,12 +34,14 @@ public class BGMove : MonoBehaviour
     }
     private void Update()
     {
-
+        if(isAttack)
+        {
         SubBackGroundMove();
-        BackGroundMove();
+        EtcMove();
+        }
     }
 
-    public void BackGroundMove()
+    public void EtcMove()
     {
         offsetBack += Time.deltaTime * offsetBackSpeed;
         offsetMid += Time.deltaTime * offsetMidSpeed;
