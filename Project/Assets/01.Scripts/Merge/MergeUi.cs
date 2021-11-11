@@ -125,7 +125,7 @@ public class MergeUi : MonoBehaviour
 
             case "모루":
                 StartCoroutine(AutoSystemCO(autoCreateSlider,  json.GetDataClass().autoCreateTime,
-                () => { merge.AutoItemCreate(0); } , isAutoCreate,  MergeUICategory.AutoCreate));
+                () => { merge.SystemItemCreate(0); } , isAutoCreate,  MergeUICategory.AutoCreate));
             break;
 
             case "다이아채굴":
@@ -180,7 +180,6 @@ public class MergeUi : MonoBehaviour
     {
         if (uiManager.sword != json.GetDataClass().swordMax &&isCreateReload)
         {
-            Debug.Log("Reload 실행");
             swordFill.fillAmount = 1;
             swordSlider.value = 0;
             isCreateReload = false;

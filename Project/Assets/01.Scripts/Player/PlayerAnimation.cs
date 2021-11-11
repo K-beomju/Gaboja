@@ -18,8 +18,13 @@ public class PlayerAnimation : MonoBehaviour
         if(raycast)
         {
             GameManager.Instance.BackMove(false);
-            animator.SetBool(hashMove, false);
-            animator.SetBool(hashAttack, true);
+
+            if(Merge.Instance.bSword)
+            {
+                animator.SetBool(hashAttack, true);
+            }
+
+                animator.SetBool(hashMove, false);
         }
         else
         {
@@ -28,4 +33,14 @@ public class PlayerAnimation : MonoBehaviour
             animator.SetBool(hashAttack, false);
         }
     }
+
+    public void IdleTest()
+    {
+        if(Merge.Instance.IdleIsHave())
+        {
+            animator.SetBool(hashAttack, true);
+        }
+    }
+
+
 }

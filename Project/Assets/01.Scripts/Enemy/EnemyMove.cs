@@ -8,7 +8,7 @@ public class EnemyMove : MonoBehaviour
 
     public float RandSpeed()
    {
-       return speed =  (float)Random.Range(1.0f,2.0f);
+       return speed =  (float)Random.Range(0.5f,0.8f);
    }
    void Update()
    {

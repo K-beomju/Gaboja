@@ -42,6 +42,11 @@ public class UiManager : Singleton<UiManager>
         SetMakeSword();
     }
 
+    public int returnSword()
+    {
+        return sword;
+    }
+
 
     public void SetCountSword() // 검 보유 갯수
     {

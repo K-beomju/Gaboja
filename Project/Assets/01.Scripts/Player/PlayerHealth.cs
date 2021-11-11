@@ -33,7 +33,6 @@ public class PlayerHealth : LivingEntity
         if (dead) return;
         base.OnDamage(damage);
         SetFill();
-       // StartCoroutine(ShowBloodEffect(point, normal));
     }
 
     public override void Die()

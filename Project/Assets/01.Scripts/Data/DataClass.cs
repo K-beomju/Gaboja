@@ -68,10 +68,15 @@ public class DataClass
         sortTime = 10;
         createSwordTime = 10;
         autoMergeTime = 20;
-        autoCreateTime = 20;
+        autoCreateTime = 5;
         autoDiaMineTime = 20;
         autoEmeraldMineTime = 20;
 
+    }
+
+    public int CurrentSword()
+    {
+        return swordCurrent;
     }
 
 

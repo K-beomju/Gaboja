@@ -26,7 +26,6 @@ public class MergeItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
 
     public void InitItem(Item i)
     {
-        Debug.Log(i.itemType);
 
         item.itemType = i.itemType;
         item.itemImg = i.itemImg;
@@ -83,7 +82,6 @@ public class MergeItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
         if (contactItem != null)
         {
             MergeItem d = contactItem.GetComponent<MergeItem>();
-            Debug.Log("merge");
             Merge.Instance.Dead(d);
             Merge.Instance.Dead(this);
             Merge.Instance.mergingItem(item.itemType + 1);

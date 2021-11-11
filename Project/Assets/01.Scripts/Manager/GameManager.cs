@@ -28,6 +28,8 @@ public class GameManager : Singleton<GameManager>
 
 
    [SerializeField] private BackGroundMove backGroundMove;
+   public static bool isAttack = false;
+
 
 
     protected override void Awake()

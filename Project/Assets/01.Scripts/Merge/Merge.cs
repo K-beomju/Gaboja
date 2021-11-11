@@ -19,7 +19,7 @@ public class Item
 
 public class Merge : Singleton<Merge>
 {
-    [SerializeField] private List<MergeItem> swordList = new List<MergeItem>();
+    public List<MergeItem> swordList = new List<MergeItem>();
     [SerializeField] public List<Item> itemdata = new List<Item>();
     [SerializeField] private RectTransform[] sortPos; // 정렬을 위한 트랜스폼의 위치입니다
     [SerializeField] private RectTransform spawnPos;
@@ -44,7 +44,7 @@ public class Merge : Singleton<Merge>
     public GameObject parentObj;
     public int newSwordIndex = -1;
 
-
+    public bool bSword = false;
 
 
 
@@ -60,8 +60,10 @@ public class Merge : Singleton<Merge>
 
 
 
-
-
+    public bool IdleIsHave()
+    {
+        return bSword;
+    }
 
     public int currentSword()
     {
@@ -91,6 +93,7 @@ public class Merge : Singleton<Merge>
     {
         if (uiManager.sword > 0)
         {
+            bSword = true;
             Vector3 randomPos = GetRandomPosition();
             GameObject go = createSword(spawnPos.position, num);
             go.transform.DOMove(randomPos, 1f);
@@ -102,8 +105,20 @@ public class Merge : Singleton<Merge>
     }
 
 
-     public void AutoItemCreate(int num)
+     public void SystemItemCreate(int num)
     {
+       StartCoroutine(AutoItemCreate(num));
+    }
+
+    public IEnumerator AutoItemCreate(int num)
+    {
+        while(uiManager.sword == 0)
+        {
+            uiManager.returnSword();
+            yield return Yields.WaitSeconds(3f);
+            yield return null;
+        }
+
         if (uiManager.sword > 0)
         {
             Vector3 randomPos = GetRandomPosition();
@@ -118,6 +133,8 @@ public class Merge : Singleton<Merge>
             mergeUi.AutoSystem("모루");
             mergeUi.ReloadCo();
         }
+
+        yield break;
     }
 
 
@@ -278,11 +295,25 @@ public class Merge : Singleton<Merge>
     public void SwordInit()
     {
 
-        for (int i = 0; i < swordList.Count; i++)
-        {
-            Debug.Log(swordList[i].item.swordName);
 
+    }
+
+
+    public IEnumerator SwordAttack()
+    {
+        int itemdata;
+
+        while(GameManager.isAttack)
+        {
+            foreach (var sword in swordList)
+            {
+                itemdata = sword.item.swordPower;
+            }
+            yield return Yields.WaitSeconds(2);
+            yield return null;
         }
+
+
 
     }
 
