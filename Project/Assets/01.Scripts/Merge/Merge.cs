@@ -291,14 +291,30 @@ public class Merge : Singleton<Merge>
 
 
     // ATTACK
-
+    private int rand;
     public int SwordInit()
     {
-
-        int rand  = Random.Range(0, swordList.Count);
+        rand  = Random.Range(0, swordList.Count);
         return swordList[rand].item.swordPower;
-
     }
+
+    public void SwordEffect(Transform tr)
+    {
+
+
+        switch(swordList[rand].item.itemType)
+        {
+            case 0:
+                effectObject = GameManager.GetSwordEffect(0);
+                effectObject.SetPositionData(tr.position , Quaternion.identity);
+            break;
+
+            case 1:
+
+            break;
+        }
+    }
+
 
 
     public IEnumerator SwordAttack()

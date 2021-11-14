@@ -13,6 +13,7 @@ public class GameManager : Singleton<GameManager>
     [Header("PoolObjs")]
     public List<GameObject> cavasEffect;
     public List<GameObject> screenEffect;
+    public List<GameObject> swordEffect;
     public GameObject damageText;
     public GameObject dropGold;
 
@@ -20,6 +21,7 @@ public class GameManager : Singleton<GameManager>
 
     private ObjectPooling<EffectObject>[] canvasEffectPool;
     private ObjectPooling<EffectObject>[] screenEffectPool;
+    private ObjectPooling<EffectObject>[] swordEffectPool;
     private ObjectPooling<DamageText> damageTextPool;
     private ObjectPooling<DropGold> dropGoldPool;
 
@@ -39,6 +41,7 @@ public class GameManager : Singleton<GameManager>
 
         Load("Effect/Canvas", cavasEffect);
         Load("Effect/Screen", screenEffect);
+        Load("Effect/SwordEffect" , swordEffect);
 
         canvasEffectPool = new ObjectPooling<EffectObject>[cavasEffect.Count];
         for (int i = 0; i < cavasEffect.Count; i++)
@@ -55,6 +58,17 @@ public class GameManager : Singleton<GameManager>
                 screenEffectPool[i] = new ObjectPooling<EffectObject>(screenEffect[i], this.transform, 3);
             }
         }
+
+        if(swordEffectPool == null)
+        {
+            swordEffectPool = new ObjectPooling<EffectObject>[swordEffect.Count];
+            for (int i = 0; i < swordEffect.Count; i++)
+            {
+                swordEffectPool[i] = new ObjectPooling<EffectObject>(swordEffect[i], battleScreen.transform, 10);
+            }
+        }
+
+
         damageTextPool = new ObjectPooling<DamageText>(damageText, battleCanvas.transform , 10);
         dropGoldPool = new ObjectPooling<DropGold>(dropGold, battleScreen.transform , 10);
 
@@ -103,6 +117,11 @@ public class GameManager : Singleton<GameManager>
     public static DropGold GetDropGold()
     {
         return Instance.dropGoldPool.GetOrCreate();
+    }
+
+    public static EffectObject GetSwordEffect(int num)
+    {
+        return Instance.swordEffectPool[num].GetOrCreate();
     }
 
 

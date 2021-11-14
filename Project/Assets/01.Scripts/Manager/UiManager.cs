@@ -72,7 +72,6 @@ public class UiManager : Singleton<UiManager>
     public void SetGold() // 골드
     {
         goldTxt.text = GetDataText(JsonSave.instance.GetDataClass().gold);
-        Debug.Log(JsonSave.instance.GetDataClass().gold);
 
     }
 

@@ -48,7 +48,7 @@ public class PlayerHealth : LivingEntity
         if(collision.gameObject.CompareTag("Enemy"))
         {
             float damge = JsonSave.instance.GetEnemyClass().enemyDamage;
-            effectObject = GameManager.GetCreateScreenEffect(0);
+            effectObject = GameManager.GetCreateScreenEffect(1);
             effectObject.SetPositionData(transform.position, Quaternion.identity);
 
             damageText = GameManager.GetDamageText();

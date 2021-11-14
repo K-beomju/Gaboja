@@ -35,7 +35,13 @@ public class DropGold : MonoBehaviour
     private IEnumerator MoveGold()
     {
         yield return Yields.WaitSeconds(0.4f);
-        transform.DOMove(new Vector3(-1,4.7f,0), 1).OnComplete(() => gameObject.SetActive(false));
+        transform.DOMove(new Vector3(-1,4.7f,0), 1).OnComplete(() =>
+         {
+            gameObject.SetActive(false);
+            JsonSave.instance.GetDataClass().gold += 6;
+            UiManager.Instance.SetGold();
+
+            });
         // TODo 골드 얻는 함수 호출
 
     }

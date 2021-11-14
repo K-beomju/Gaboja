@@ -38,8 +38,16 @@ public class PlayerAttack : MonoBehaviour
         Collider2D hitEnemis = Physics2D.OverlapCircle(transform.position,attackRange, enemyLayer);
         IDamageble target = hitEnemis.GetComponent<IDamageble>();
 
-        target.OnDamage(merge.SwordInit() +  JsonSave.instance.GetUpgradeClass().
+        int swordDmg = merge.SwordInit();
+
+        merge.SwordEffect(hitEnemis.transform);
+        target.OnDamage(swordDmg +  JsonSave.instance.GetUpgradeClass().
         upAbility[0] - JsonSave.instance.GetUpgradeClass().upCost[0]);
+
+
+        SoundManager.Instance.PlayFXSound("SwordAttack");
+
+
     }
 
 
