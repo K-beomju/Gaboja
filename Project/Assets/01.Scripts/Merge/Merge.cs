@@ -97,7 +97,7 @@ public class Merge : Singleton<Merge>
             Vector3 randomPos = GetRandomPosition();
             GameObject go = createSword(spawnPos.position, num);
             go.transform.DOMove(randomPos, 1f);
-             uiManager.sword--;
+            uiManager.sword--;
             uiManager.SetMakeSword();
             uiManager.SetCountSword();
 
@@ -105,14 +105,14 @@ public class Merge : Singleton<Merge>
     }
 
 
-     public void SystemItemCreate(int num)
+    public void SystemItemCreate(int num)
     {
-       StartCoroutine(AutoItemCreate(num));
+        StartCoroutine(AutoItemCreate(num));
     }
 
     public IEnumerator AutoItemCreate(int num)
     {
-        while(uiManager.sword == 0)
+        while (uiManager.sword == 0)
         {
             uiManager.returnSword();
             yield return Yields.WaitSeconds(3f);
@@ -175,7 +175,7 @@ public class Merge : Singleton<Merge>
         StartCoroutine(SearchSword());
     }
 
-     private IEnumerator SearchSword() // Error - 검이 없으면 에러남 index 에러
+    private IEnumerator SearchSword() // Error - 검이 없으면 에러남 index 에러
     {
 
         MergeItem swordFinding = null;
@@ -192,10 +192,10 @@ public class Merge : Singleton<Merge>
                     swordFinding = i;
                 }
             }
-            if(swordFinding == null && !mergeUi.isAutoMerge)
+            if (swordFinding == null && !mergeUi.isAutoMerge)
             {
-            yield return Yields.WaitSeconds(3f);
-            Debug.Log("같은 등급의 검을 찾는 중");
+                yield return Yields.WaitSeconds(3f);
+                Debug.Log("같은 등급의 검을 찾는 중");
             }
             yield return null;
         }
@@ -205,7 +205,7 @@ public class Merge : Singleton<Merge>
         //찾으면 실행
         Vector3 randomPos = GetRandomPosition();
         magnetPos = randomPos;
-        StartCoroutine(AutoMergeDelay(sword,swordFinding, randomPos));
+        StartCoroutine(AutoMergeDelay(sword, swordFinding, randomPos));
         Debug.Log("AutoMergeDelay 실행");
         yield break;
     }
@@ -237,7 +237,7 @@ public class Merge : Singleton<Merge>
 
         createSword(magnetPos, nextNum); // 검 제작
 
-         // 자석 이미지 비활성화, 이펙트 풀링
+        // 자석 이미지 비활성화, 이펙트 풀링
         magnetImage.gameObject.SetActive(false);
         effectObject = GameManager.GetCreateCanvasEffect(0);
         effectObject.SetPositionData(magnetPos, Quaternion.identity);
@@ -256,15 +256,15 @@ public class Merge : Singleton<Merge>
     // Etc
     public void SortSword()
     {
-        if(!isMerge)
+        if (!isMerge)
         {
 
-        //단 이 로직으로 할 경우 합치는 도중에 정렬을 해버리면 합쳐지는 녀석은 DOTween이 무시됨. 합쳐지고 았을 때는 정렬이 안되도록 막는 로직이 필요함.
-        swordList = swordList.OrderByDescending(x => x.item.itemType).ToList();
-        for (int i = 0; i < swordList.Count; i++)
-        {
-            swordList[i].transform.DOMove(sortPos[i].transform.position, 1);
-        }
+            //단 이 로직으로 할 경우 합치는 도중에 정렬을 해버리면 합쳐지는 녀석은 DOTween이 무시됨. 합쳐지고 았을 때는 정렬이 안되도록 막는 로직이 필요함.
+            swordList = swordList.OrderByDescending(x => x.item.itemType).ToList();
+            for (int i = 0; i < swordList.Count; i++)
+            {
+                swordList[i].transform.DOMove(sortPos[i].transform.position, 1);
+            }
         }
 
     }
@@ -292,29 +292,31 @@ public class Merge : Singleton<Merge>
 
     // ATTACK
 
-    public void SwordInit()
+    public int SwordInit()
     {
 
+        int rand  = Random.Range(0, swordList.Count);
+        return swordList[rand].item.swordPower;
 
     }
 
 
     public IEnumerator SwordAttack()
     {
-        int itemdata;
-
-        while(GameManager.isAttack)
+        while (GameManager.isAttack)
         {
-            foreach (var sword in swordList)
+            List<Item> item = new List<Item>();
+            for (int i = 0; i < swordList.Count; i++)
             {
-                itemdata = sword.item.swordPower;
+                item.Add(swordList[i].item);
+                Debug.Log(item);
             }
-            yield return Yields.WaitSeconds(2);
+            yield return Yields.WaitSeconds(3);
             yield return null;
         }
 
 
-
+        yield break;
     }
 
 

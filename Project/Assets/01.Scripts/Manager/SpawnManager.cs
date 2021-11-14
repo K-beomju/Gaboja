@@ -14,6 +14,7 @@ public class SpawnManager : MonoBehaviour
     public int enemyCount;
 
     [SerializeField] private Transform spawnPos;
+    [SerializeField] private GameObject battleScreen;
 
     public int stage;
 
@@ -24,7 +25,7 @@ public class SpawnManager : MonoBehaviour
         enemyCreatePool = new ObjectPooling<EnemyMove>[enemyList.Count];
         for (int i = 0; i < enemyList.Count; i++)
         {
-            enemyCreatePool[i] = new ObjectPooling<EnemyMove>(enemyList[i], this.transform, 3);
+            enemyCreatePool[i] = new ObjectPooling<EnemyMove>(enemyList[i], battleScreen.transform, 3);
         }
 
     }

@@ -14,21 +14,22 @@ public class GameManager : Singleton<GameManager>
     public List<GameObject> cavasEffect;
     public List<GameObject> screenEffect;
     public GameObject damageText;
+    public GameObject dropGold;
 
 
 
     private ObjectPooling<EffectObject>[] canvasEffectPool;
     private ObjectPooling<EffectObject>[] screenEffectPool;
     private ObjectPooling<DamageText> damageTextPool;
+    private ObjectPooling<DropGold> dropGoldPool;
 
     [Header("PoolTr")]
    [SerializeField] private RectTransform mainCanvas;
    [SerializeField] private RectTransform battleCanvas;
+    [SerializeField] private Transform battleScreen;
 
-
-
-   [SerializeField] private BackGroundMove backGroundMove;
    public static bool isAttack = false;
+   [SerializeField] private BackGroundMove backGroundMove;
 
 
 
@@ -55,6 +56,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
         damageTextPool = new ObjectPooling<DamageText>(damageText, battleCanvas.transform , 10);
+        dropGoldPool = new ObjectPooling<DropGold>(dropGold, battleScreen.transform , 10);
 
 
     }
@@ -96,6 +98,11 @@ public class GameManager : Singleton<GameManager>
     public static DamageText GetDamageText()
     {
         return Instance.damageTextPool.GetOrCreate();
+    }
+
+    public static DropGold GetDropGold()
+    {
+        return Instance.dropGoldPool.GetOrCreate();
     }
 
 

@@ -28,7 +28,8 @@ public class MainMenu : Singleton<MainMenu>
     public PanelContent panelContent;
 
 
-
+    public GameObject battleScreen;
+    private Vector3 curPos;
 
 
     protected override void Awake()
@@ -56,7 +57,7 @@ public class MainMenu : Singleton<MainMenu>
 
     private void Start()
     {
-
+        curPos = battleScreen.transform.position;
         panelList.ForEach(x => x.gameObject.SetActive(false));
         exitBtn.gameObject.SetActive(false);
         emeraldObj.gameObject.SetActive(false);
@@ -85,6 +86,7 @@ public class MainMenu : Singleton<MainMenu>
             }
             buttonList[i].interactable = false;
             panelList[i].gameObject.SetActive(true);
+            battleScreen.transform.position = new Vector3(0,1.2f,0);
         }
 
 
@@ -98,6 +100,7 @@ public class MainMenu : Singleton<MainMenu>
             buttonList[i].interactable = true;
             exitBtn.gameObject.SetActive(false);
             emeraldObj.gameObject.SetActive(false);
+             battleScreen.transform.position = curPos;
         }
 
     }

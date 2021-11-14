@@ -21,6 +21,7 @@ public class PanelContent : MonoBehaviour
     public ScrollRect scrollRect;
     public RectTransform rectContent;
 
+
     void Awake()
     {
 
@@ -60,7 +61,6 @@ public class PanelContent : MonoBehaviour
 
         GameObject a =  panelList.Find(x => x.gameObject.activeSelf);
             scrollRect.content = a.GetComponent<RectTransform>();
-           
     }
 
     public void ChangeSprite(int i)

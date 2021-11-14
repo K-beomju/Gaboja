@@ -53,16 +53,33 @@ public class JsonSave : MonoBehaviour
         }
 
         dataClass = new DataClass();
+
+
     }
 
 
-
+    public EnemyDataInfo GetEnemyClass()
+    {
+        return dataClass._enemyData;
+    }
 
     public DataClass GetDataClass()
     {
         return dataClass;
-
     }
+
+    public PlayerDataInfo GetPlayerClass()
+    {
+        return dataClass._playerData;
+    }
+
+    public Upgrade GetUpgradeClass()
+    {
+        return dataClass._upgrades;
+    }
+
+
+
 
 
 
@@ -82,6 +99,8 @@ public class JsonSave : MonoBehaviour
 
     public void Load()
     {
+        //dataClass = new DataClass();
+
         print("Load to : " + getFilePath(saveFileName));
 
         string fileStr = getFilePath(saveFileName);
@@ -94,12 +113,15 @@ public class JsonSave : MonoBehaviour
             JsonUtility.FromJsonOverwrite(jsonString, dataClass); // 덮어쓰기
 
             print(jsonString);
+
         }
         else
         {
             print("no File");
         }
     }
+
+
 
 
     string getFilePath(string fileName)
